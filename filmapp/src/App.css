@@ -1,3 +1,54 @@
+.container {
+  text-align: center;
+  margin-left: 100px;
+}
+
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: rgb(66, 102, 136);
+  padding: 40px;
+  border-radius: 5px;
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end; 
+}
+
+button {
+  border-radius: 5px;
+  width: 200px;
+  height: 40px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(6, 48, 65);
+  
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+
+label {
+  width: 100px; 
+  margin-right: 10px;
+  text-align: right; 
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  flex: 1;
+  padding: 5px;
+  font-size: 16px;
+}
+
+
 .App {
   text-align: center;
 }
