@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../App.css'
+import { useUser } from "../context/useUser";
 
 const url = 'http://localhost:3001'
 
 function Login() {
     const navigate = useNavigate()
-    const [username, setUsername]  = useState ('')
+    const { setToken } = useUser()
+    const { username, setUsername } = useUser()  
+    //const { password, setPassword} = useUser()
+    const { userId, setUserId} = useUser()
+    //const [username, setUsername]  = useState ('')
     const [password, setPassword]  = useState ('')
     function handleSubmit() {
         
@@ -20,8 +25,12 @@ function Login() {
             password: password
           },)
           .then(response => {
+            console.log(response.data)
             console.log(response.data.token)
             sessionStorage.setItem('token', response.data.token)
+            //sessionStorage.setItem('username',response.data.username)
+            setToken(response.data.token)
+            setUserId(response.data.id)
             navigate('/start',{state: {username: username}})
 
           }).catch(error => {

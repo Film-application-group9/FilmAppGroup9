@@ -31,13 +31,14 @@ const createUserObject = (id,username,token=undefined) => {
 
 const postLogin = async(req,res,next) => {
     console.log(req.body)
+    const { username } = req.body.username
     const invalid_credentials_message = 'Invalid credentials.'
     try {
         const userFromDb = await selectUserByUsername(req.body.username)
         if (userFromDb.rowCount === 0) return next(new ApiError(invalid_credentials_message))
         const user = userFromDb.rows[0]
         if (!await compare(req.body.password,user.password)) return next(new ApiError(invalid_credentials_message,401))
-        const token = sign(req.body.username,process.env.JWT_SECRET_KEY)
+        const token = sign({username: username},process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
         return res.status(200).json(createUserObject(user.id,user.username,token))
     } catch (error) {
         next(error)

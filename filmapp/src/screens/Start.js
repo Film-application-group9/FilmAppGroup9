@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { useUser } from "../context/useUser";
 import '../App.css'
 
 const url = 'http://localhost:3001'
 
 const Start = () => {
     
-    const location = useLocation()
-    const username = location.state?.username || 'Guest'
+    //const location = useLocation()
+    //const username = location.state?.username || 'Guest'
+    const { username } = useUser()
+    const { userId } = useUser()
     console.log(username)
     
     
     return (
         <div className="container">
             <h2>Start</h2>
-            <p>Welcome {username}</p>
+            <p>Welcome {username} idtesti: your id = {userId} </p>
         </div>
     );
 
