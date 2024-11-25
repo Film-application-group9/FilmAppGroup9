@@ -8,11 +8,12 @@ const url = 'http://localhost:3001'
 
 const DeleteAccountTest = () => {
     const { userId } = useUser()
+    const { token } = useUser()
     function handleSubmit() {
         //console.log(userId)
         axios.delete(url + '/user/delete/' + userId, {
             headers: {
-                Authorization: sessionStorage.getItem('token')
+                Authorization: token//sessionStorage.getItem('token')
             }        
         })
         .then (response => {

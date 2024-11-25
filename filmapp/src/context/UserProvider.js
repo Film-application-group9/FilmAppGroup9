@@ -7,8 +7,21 @@ export default function UserProvider({children}) {
     const [username, setUsername]  = useState ('')
     //const [password, setPassword]  = useState ('')
     const [userId, setUserId] = useState ('')
+
+    const readAuthorizationHeader = (response) => {
+        if (response.headers.get('authorization') && 
+          response.headers.get('authorization').split(' ')[0] === 'Bearer') {
+          return response.headers.get('authorization').split(' ')[1]
+        }
+    }
+
+    const updateToken = (response => {
+        setToken(readAuthorizationHeader(response))
+        sessionStorage.setItem('token',readAuthorizationHeader(response))
+    })
+
     return (
-        <UserContext.Provider value={{token, setToken, username, setUsername, userId, setUserId}}>
+        <UserContext.Provider value={{token, setToken, updateToken, username, setUsername, userId, setUserId}}>
             { children }
         </UserContext.Provider>
   )

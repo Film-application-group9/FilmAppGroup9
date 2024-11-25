@@ -8,7 +8,7 @@ const url = 'http://localhost:3001'
 
 function Login() {
     const navigate = useNavigate()
-    const { setToken } = useUser()
+    const { token, setToken } = useUser()
     const { username, setUsername } = useUser()  
     //const { password, setPassword} = useUser()
     const { userId, setUserId} = useUser()
@@ -25,13 +25,17 @@ function Login() {
             password: password
           },)
           .then(response => {
+            console.log(response)
             console.log(response.data)
-            console.log(response.data.token)
-            sessionStorage.setItem('token', response.data.token)
+            //console.log(response.data.token)
+            //sessionStorage.setItem('token', response.data.token)
             //sessionStorage.setItem('username',response.data.username)
-            setToken(response.data.token)
+            //setToken(response.data.token)
+            setToken(readAuthorizationHeader(response))
             setUserId(response.data.id)
-            navigate('/start',{state: {username: username}})
+            sessionStorage.setItem('token', readAuthorizationHeader(response))
+            //navigate('/start',{state: {username: username}})
+            navigate('/start')
 
           }).catch(error => {
             //alert(error.response.data.error ? error.response.data.error : error)
@@ -39,7 +43,13 @@ function Login() {
             setPassword('')
           })
         }
-      
+        
+        const readAuthorizationHeader = (response) => {
+            if (response.headers.get('authorization') && 
+              response.headers.get('authorization').split(' ')[0] === 'Bearer') {
+              return response.headers.get('authorization').split(' ')[1]
+            }
+          }
       
         return (
             <div>  

@@ -1,5 +1,5 @@
 import { compare, hash } from "bcrypt";
-import { insertUser,selectUserByUsername, removeUser } from "../models/User.js";
+import { insertUser,selectUserByUsername, removeUser, getUser } from "../models/User.js";
 import { ApiError } from "../helpers/ApiError.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
@@ -30,7 +30,7 @@ const createUserObject = (id,username,token=undefined) => {
 }
 
 const postLogin = async(req,res,next) => {
-    console.log(req.body)
+    console.log('hei  ' +req.body)
     const { username } = req.body.username
     const invalid_credentials_message = 'Invalid credentials.'
     try {
@@ -39,7 +39,11 @@ const postLogin = async(req,res,next) => {
         const user = userFromDb.rows[0]
         if (!await compare(req.body.password,user.password)) return next(new ApiError(invalid_credentials_message,401))
         const token = sign({username: username},process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
-        return res.status(200).json(createUserObject(user.id,user.username,token))
+        return res
+            .header('Access-Control-Expose-Headers','Authorization')
+            .header('Authorization','Bearer ' + token)
+            .status(200).json(createUserObject(user.id,user.username))
+            //.status(200).json(createUserObject(user.id,user.username,token))
     } catch (error) {
         next(error)
     }
@@ -64,4 +68,19 @@ const deleteUser = async(req,res,next) => {
     }
 }
 
-export { postRegistration, postLogin, deleteUser }
+/*const authorizationHeader = (username) => {
+    const token = sign({username: username},process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
+    return res.header('Access-Control-Expose-Headers','Authorization')
+        .header('Authorization','Bearer ' + token)
+}*/
+const getAllUsers = async(req,res,next) => {
+    try {
+        const result = await getUser()
+        return res.status(200).json(result.rows)
+    } catch (error) {
+        return next(error)
+    }
+}
+
+
+export { postRegistration, postLogin, deleteUser, getAllUsers }

@@ -12,6 +12,7 @@ const Start = () => {
     //const username = location.state?.username || 'Guest'
     const { username } = useUser()
     const { userId } = useUser()
+    const { token } = useUser()
     console.log(username)
     
     
@@ -19,6 +20,7 @@ const Start = () => {
         <div className="container">
             <h2>Start</h2>
             <p>Welcome {username} idtesti: your id = {userId} </p>
+            <p>token test: {token} </p>
         </div>
     );
 
