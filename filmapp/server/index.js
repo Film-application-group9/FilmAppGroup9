@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import {searchHandler} from "./search.js";
+import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
 
 dotenv.config();
 const port = 3001;
@@ -14,6 +15,8 @@ app.use(express.urlencoded({extended: true}));
 
 app.get('/search', searchHandler(apiKey));
 
-
+app.post('/favorites', postUserFavorite );
+app.get('/favorites/:idUser', getUserFavorites);
+app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
 app.listen(port);
 
