@@ -1,6 +1,6 @@
 {
-  "name": "filmapp",
   "type": "module",
+  "name": "filmapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,17 +8,21 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
-    "buffer": "^6.0.3",
-    "jsdom": "^25.0.1",
+    "concat": "^1.0.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-scripts": "5.0.1",
-    "react-xml-parser": "^1.1.8",
-    "timers-browserify": "^2.0.12",
-    "web-vitals": "^2.1.4",
-    "xml-js": "^1.6.11"
+    "react-router-dom": "^7.0.1",
+    "react-script": "^2.0.5",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "devStart": "cross-env NODE_ENV=development nodemon server/index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
