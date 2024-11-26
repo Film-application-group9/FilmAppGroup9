@@ -16,10 +16,10 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.get('/search', searchHandler(apiKey));
-
 app.post('/favorites', postUserFavorite );
 app.get('/favorites/:idUser', getUserFavorites);
 app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
+
 app.listen(port);
 
 
