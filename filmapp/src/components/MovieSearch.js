@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Showtimes } from '../showtimes/showtimes.js';
 
 const MovieSearch = () => {
     const [movies, setMovies] = useState([]);
@@ -130,7 +131,7 @@ const MovieSearch = () => {
             </form>
         
             
-            
+            <Showtimes/>
         </div>
     );
 };
