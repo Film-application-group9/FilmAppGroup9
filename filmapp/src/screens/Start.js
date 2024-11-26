@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import { useUser } from "../context/useUser";
+import { useUser } from "../context/useUser.js";
 import '../App.css'
 
 const url = 'http://localhost:3001'

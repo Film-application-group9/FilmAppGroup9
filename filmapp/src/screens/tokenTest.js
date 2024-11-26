@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-import { useUser } from '../context/useUser';
+import { useUser } from '../context/useUser.js';
 
 export default function TokenTest() {
   const { token } = useUser()
