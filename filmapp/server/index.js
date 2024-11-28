@@ -6,6 +6,7 @@ import pkg from 'pg';
 import userRouter from './routers/userRouter.js';
 import {searchHandler} from "./search.js";
 import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
+import groupsRouter from './routers/groupsRouter.js'
 
 
 
