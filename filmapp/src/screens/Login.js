@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import '../App.css'
+import { useUser } from "../context/useUser.js";
 
 const url = 'http://localhost:3001'
 
 function Login() {
     const navigate = useNavigate()
-    const [username, setUsername]  = useState ('')
+    const { token, setToken } = useUser()
+    const { username, setUsername } = useUser()  
+    //const { password, setPassword} = useUser()
+    const { userId, setUserId} = useUser()
+    //const [username, setUsername]  = useState ('')
     const [password, setPassword]  = useState ('')
     function handleSubmit() {
         
@@ -20,9 +25,17 @@ function Login() {
             password: password
           },)
           .then(response => {
-            console.log(response.data.token)
-            sessionStorage.setItem('token', response.data.token)
-            navigate('/start',{state: {username: username}})
+            console.log(response)
+            console.log(response.data)
+            //console.log(response.data.token)
+            //sessionStorage.setItem('token', response.data.token)
+            //sessionStorage.setItem('username',response.data.username)
+            //setToken(response.data.token)
+            setToken(readAuthorizationHeader(response))
+            setUserId(response.data.id)
+            sessionStorage.setItem('token', readAuthorizationHeader(response))
+            //navigate('/start',{state: {username: username}})
+            navigate('/start')
 
           }).catch(error => {
             //alert(error.response.data.error ? error.response.data.error : error)
@@ -30,7 +43,13 @@ function Login() {
             setPassword('')
           })
         }
-      
+        
+        const readAuthorizationHeader = (response) => {
+            if (response.headers.get('authorization') && 
+              response.headers.get('authorization').split(' ')[0] === 'Bearer') {
+              return response.headers.get('authorization').split(' ')[1]
+            }
+          }
       
         return (
             <div>  

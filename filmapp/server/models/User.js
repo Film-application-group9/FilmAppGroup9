@@ -11,4 +11,8 @@ const selectUserByUsername = async (username) => {
 const removeUser = async (id) => {
     return await pool.query('delete from accounts where id = $1 returning id',[id])
 }
-export { insertUser, selectUserByUsername, removeUser }
+
+const getUser = async() => {
+    return await pool.query('select id,username from accounts')
+}
+export { insertUser, selectUserByUsername, removeUser, getUser }

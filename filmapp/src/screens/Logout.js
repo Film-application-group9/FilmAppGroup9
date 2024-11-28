@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import '../App.css'
+import { useUser } from "../context/useUser.js";
 
 const url = 'http://localhost:3001'
 
 function Logout() {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const { setUsername } = useUser()
+    const { setUserId } = useUser()
+    const { setToken } = useUser()
     function handleSubmit() {
 
         sessionStorage.removeItem('token')
+        setUsername('')
+        setUserId('')
+        setToken('')
 
     }
     return (
