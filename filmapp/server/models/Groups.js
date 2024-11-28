@@ -14,7 +14,7 @@ const getMovies = async (groupId,userId) => {
 
 const getUsers = async (groupId,userId) => {
     return await pool.query(`
-    SELECT id_user FROM group_requests INNER JOIN accounts ON users_id_user = id_user 
+    SELECT users_id_user, username FROM users_in_groups INNER JOIN accounts ON users_id_user = id
     WHERE groups_id_group=$1 AND EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user = $2 AND groups_id_group = $1)`, [groupId,userId])
 }
 
