@@ -1,6 +1,7 @@
 import { compare, hash } from "bcrypt";
 import { getAllGroups, insertGroup, insertUsersInGroups, getShowtimes, getMovies, getUsers, getGroupsByUserId, 
-        addMovie, addShowtime, newGroup, removeUser, removeSelf, addComment, addJoinRequest, deleteGroup, getRequests } from "../models/Groups.js";
+        addMovie, addShowtime, newGroup, removeUser, removeSelf, addComment, addJoinRequest, deleteGroup, getRequests,
+        getName, getMemberStatus } from "../models/Groups.js";
 import { ApiError } from "../helpers/ApiError.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
@@ -18,9 +19,27 @@ const getGroups = async (req,res,next) => {
     }
 }
 
+const getGroupName = async (req,res,next) => {
+    try {
+        const result = await getName(req.params.groupId)
+        return res.status(200).json(result.rows[0])
+    } catch (error) {
+        return next(error)
+    }
+}
+
+const getMembershipStatus = async (req,res,next) => {
+    try {
+        const result = await getMemberStatus(req.params.groupId,req.params.userId)
+        return res.status(200).json(result.rows[0])
+    } catch (error) {
+        return next(error)
+    }
+}
+
 const getGroupShowtimes = async (req,res,next) => {
     try {
-        const result = await getShowtimes(req.params.groupId,req.body.userId)
+        const result = await getShowtimes(req.params.groupId,req.params.userId)
         return res.status(200).json(result.rows)
     } catch (error) {
         return next(error)
@@ -29,7 +48,7 @@ const getGroupShowtimes = async (req,res,next) => {
 
 const getGroupMovies = async (req,res,next) => {
     try {
-        const result = await getMovies(req.params.groupId,req.body.userId)
+        const result = await getMovies(req.params.groupId,req.params.userId)
         return res.status(200).json(result.rows)
     } catch (error) {
         return next(error)
@@ -38,7 +57,7 @@ const getGroupMovies = async (req,res,next) => {
 
 const getGroupUsers = async (req,res,next) => {
     try {
-        const result = await getUsers(req.params.groupId,req.body.userId)
+        const result = await getUsers(req.params.groupId,req.params.userId)
         return res.status(200).json(result.rows)
     } catch (error) {
         return next(error)
@@ -56,7 +75,7 @@ const getUsersGroups = async (req,res,next) => {
 
 const getPendingRequests = async (req,res,next) => {
     try {
-        const result = await getRequests(req.params.groupId, req.body.userId)
+        const result = await getRequests(req.params.groupId, req.params.userId)
         return res.status(200).json(result.rows)
     } catch (error) {
         return next(error)
@@ -108,7 +127,7 @@ const createGroup = async(req,res,next) => {
 const removeUserFromGroup = async (req,res,next) => {
     console.log(req.body,req.params.groupId)
     try {
-        if (req.body.userId = req.body.targetUserId) return next(new ApiError('Can\'t remove owner of group',400))
+        if (req.body.userId == req.body.targetUserId) return next(new ApiError('Can\'t remove owner of group',400))
         const result = await removeUser(req.params.groupId,req.body.userId,req.body.targetUserId)
         return res.status(200).json(result.rowCount)
     } catch (error) {
@@ -162,4 +181,5 @@ const createGroup = async(req,res,next) => {
 */
 
 export { getGroups, getUsersGroups, createGroup, getGroupShowtimes, getGroupMovies, getGroupUsers, addMovieToGroup, addShowtimeToGroup,
-         removeUserFromGroup, removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests }
+         removeUserFromGroup, removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests, getGroupName,
+         getMembershipStatus }
