@@ -3,9 +3,21 @@ import { pool } from "../helpers/db.js";
 const getAllGroups = async () => {
     return await pool.query('SELECT * FROM groups')
 }
+const getMemberStatus = async (groupId,userId) => {
+    return await pool.query(`SELECT 
+  CASE 
+    WHEN EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user = $1 AND groups_id_group = $2 AND is_owner = TRUE) THEN 2
+    WHEN EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user = $1 AND groups_id_group = $2) THEN 1
+    ELSE 0
+  END;`, [userId, groupId])
+}
 
 const getShowtimes = async (groupId,userId) => {
     return await pool.query('SELECT * FROM group_showtimes WHERE id_group=$1 AND EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user = $2 AND groups_id_group = $1)', [groupId, userId])
+}
+
+const getName = async (groupId) => {
+    return await pool.query('SELECT groupname FROM groups WHERE id_group=$1', [groupId])
 }
 
 const getMovies = async (groupId,userId) => {
@@ -91,4 +103,4 @@ DELETE FROM groups WHERE id_group = $1 AND EXISTS (SELECT 1 FROM owner_check);
 }
 
 export { getAllGroups, insertGroup, insertUsersInGroups, getShowtimes, getMovies, getUsers, getGroupsByUserId, addMovie, addShowtime,
-         newGroup, removeUser, removeSelf, addComment, addJoinRequest, deleteGroup, getRequests }
+         newGroup, removeUser, removeSelf, addComment, addJoinRequest, deleteGroup, getRequests, getName, getMemberStatus }

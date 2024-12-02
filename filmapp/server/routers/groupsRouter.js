@@ -1,17 +1,20 @@
 import { Router } from "express";
 import jwt from 'jsonwebtoken';
 import { getGroups, getUsersGroups, createGroup, getGroupShowtimes, getGroupMovies, getGroupUsers, addMovieToGroup, addShowtimeToGroup, removeUserFromGroup,
-         removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests } from "../controllers/GroupsController.js";
+         removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests, getMembershipStatus,
+         getGroupName} from "../controllers/GroupsController.js";
 
 const router = Router()
 
 
 router.get('/', getGroups)
 router.get('/mygroups/:userId', getUsersGroups)
-router.get('/:groupId/showtimes', getGroupShowtimes)
-router.get('/:groupId/movies', getGroupMovies)
-router.get('/:groupId/users', getGroupUsers)
-router.get('/:groupId/pending', getPendingRequests)
+router.get('/:groupId/groupname', getGroupName)
+router.get('/:groupId/membership/:userId', getMembershipStatus)
+router.get('/:groupId/showtimes/:userId', getGroupShowtimes)
+router.get('/:groupId/movies/:userId', getGroupMovies)
+router.get('/:groupId/users/:userId', getGroupUsers)
+router.get('/:groupId/pending/:userId', getPendingRequests)
 
 router.post('/creategroup/', createGroup)
 router.post ('/:groupId/addmovie', addMovieToGroup)
