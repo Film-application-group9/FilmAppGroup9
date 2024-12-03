@@ -10,6 +10,7 @@ import TokenTest from './screens/tokenTest.js';
 import FavoritesList from './screens/FavoritesList.js';
 import MovieSearch from './components/MovieSearch.js';
 import React from 'react';
+import Reviews from './screens/Reviews.js';
 
 
 
@@ -19,12 +20,14 @@ function App() {
       <Router>
         <div>
           <ul>
+            <li><Link to="/">Homepage</Link></li>
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/signup">Register</Link></li>
             <li><Link to="/logout">Logout</Link></li>
             <li><Link to="/deleteAccountTest">Delete Account</Link></li>
             <li><Link to="/tokenTest">Get accounts</Link></li>
             <li><Link to="/favorites">Favorites</Link></li>
+            
             
           </ul>
         </div>
@@ -37,6 +40,7 @@ function App() {
           <Route exact path = "/tokenTest" element = {<TokenTest/>}/>
           <Route exact path="/" element={<MovieSearch />} />
           <Route exact path="/favorites" element={<FavoritesList />} />
+          <Route exact path="/movies" element={<Reviews/>}/>
         </Routes>
       </Router>
     </UserProvider>

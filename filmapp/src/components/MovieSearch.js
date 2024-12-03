@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useHistory } from 'react-router-dom';
 import { Showtimes } from '../showtimes/showtimes.js';
+import { useUser } from "../context/useUser.js";
 
 const MovieSearch = () => {
     const [movies, setMovies] = useState([]);
@@ -10,6 +11,9 @@ const MovieSearch = () => {
     const [language, setLanguage] = useState('');  
     const [releaseYear, setReleaseYear] = useState('');
     const navigate = useNavigate();
+    const {token} = useUser()
+    console.log("MovieSearch-token: ", token)
+    
 
     // placeholder for auth status
      const isLoggedIn = true;
@@ -56,6 +60,20 @@ const MovieSearch = () => {
             alert('Failed to get favorites');
         }
     };
+
+    const ToReviews = ({id}) => {
+        const navigate = useNavigate();
+      
+        const handleClick = () => {
+
+            navigate(`/movies?id=${id}`, {
+                state: { token: token },
+              });
+        }
+        
+      
+        return (<button onClick={handleClick}>See reviews</button>)
+    }
 
     return (
         <div>
@@ -112,15 +130,15 @@ const MovieSearch = () => {
                         {movies.map((movie) => (
                             <li key={movie.id}>
                                 <h3>{movie.title}</h3>
-                                <p>{movie.overview}</p>
-                                <p>{movie.release_date}</p>
+                                <p>{"Released: "}{movie.release_date}</p>
                                 {movie.poster_path && (
                                     <img
                                         src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
                                         alt={movie.title}
                                     />
                                 )}
-                                 {isLoggedIn && <button onClick={() => addFavorite(movie.id, movie.title)}>Add to favorites</button>} 
+                                 {isLoggedIn && <div><button onClick={() => addFavorite(movie.id, movie.title)}>Add to favorites</button>
+                                 <ToReviews id={movie.id}/></div>} 
                                 
                             </li>
                            

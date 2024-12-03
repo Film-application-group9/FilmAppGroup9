@@ -36,7 +36,7 @@ function Login() {
             sessionStorage.setItem('token', readAuthorizationHeader(response))
             //navigate('/start',{state: {username: username}})
             navigate('/start')
-
+                
           }).catch(error => {
             //alert(error.response.data.error ? error.response.data.error : error)
             alert("Wrong username/password")
