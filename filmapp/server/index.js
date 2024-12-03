@@ -6,6 +6,7 @@ import pkg from 'pg';
 import userRouter from './routers/userRouter.js';
 import {searchHandler} from "./search.js";
 import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
+import groupsRouter from './routers/groupsRouter.js'
 
 import reviewRouter from './routers/reviewRouter.js'
 
@@ -20,6 +21,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use('/user',userRouter)
 app.use('/review', reviewRouter)
+app.use('/groups',groupsRouter)
 app.get('/search', searchHandler(apiKey));
 app.post('/favorites', postUserFavorite );
 app.get('/favorites/:idUser', getUserFavorites);
