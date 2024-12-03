@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 import { Showtimes } from '../showtimes/showtimes.js';
+
 
 const MovieSearch = () => {
     const [movies, setMovies] = useState([]);
@@ -27,7 +29,7 @@ const MovieSearch = () => {
         if (genre) searchParams.append('genre', genre);
         if (language) searchParams.append('language', language);
         if (releaseYear) searchParams.append('release_year', releaseYear);
-        const response = await fetch(`http://localhost:3001/search?${searchParams.toString()}`);
+        const response = await axios.get(`http://localhost:3001/search?${searchParams.toString()}`);
         const data = await response.json();
 
         if (response.ok) {
