@@ -13,6 +13,7 @@ import MyGroups from './screens/MyGroups.js';
 import GroupPage from './screens/GroupPage.js';
 
 import React from 'react';
+import Reviews from './screens/Reviews.js';
 
 
 
@@ -22,6 +23,7 @@ function App() {
       <Router>
         <div>
           <ul>
+            <li><Link to="/">Homepage</Link></li>
             <li><Link to="/login">Login</Link></li>
             <li><Link to="/signup">Register</Link></li>
             <li><Link to="/logout">Logout</Link></li>
@@ -29,6 +31,7 @@ function App() {
             <li><Link to="/tokenTest">Get accounts</Link></li>
             <li><Link to="/favorites">Favorites</Link></li>
             <li><Link to="/mygroups">My Groups</Link></li>
+            
             
           </ul>
         </div>
@@ -41,6 +44,7 @@ function App() {
           <Route exact path = "/tokenTest" element = {<TokenTest/>}/>
           <Route exact path="/" element={<MovieSearch />} />
           <Route exact path="/favorites" element={<FavoritesList />} />
+          <Route exact path="/movies" element={<Reviews/>}/>
           <Route exact path="/mygroups" element={<MyGroups />} />
           <Route exact path="/groups/:group_id" element={<GroupPage />} />
         </Routes>
