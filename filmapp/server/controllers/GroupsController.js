@@ -136,7 +136,7 @@ const removeUserFromGroup = async (req,res,next) => {
 }
 
 const removeSelfFromGroup= async (req,res,next) => {
-    console.log(req.body,req.params.groupId)
+    console.log(req.body.userId,req.params.groupId)
     try {
         const result = await removeSelf(req.params.groupId,req.body.userId)
         return res.status(200).json(result.rowCount)

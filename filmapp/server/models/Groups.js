@@ -67,7 +67,7 @@ const removeUser = async (groupId,userId,targetUserId) => {
 const removeSelf = async (groupId,userId) => {
     return await pool.query(`
         DELETE FROM users_in_groups WHERE groups_id_group=$1 AND users_id_user=$2
-        AND EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user =$2 AND groups_id_group=$1 AND is_owner = FALSE)`,[groupId,userId])
+        AND EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user =$2 AND groups_id_group=$1 AND is_owner IS NOT TRUE)`,[groupId,userId])
 }
 
 const insertUsersInGroups = async (userId,groupId) => {
