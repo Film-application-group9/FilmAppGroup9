@@ -1,7 +1,7 @@
 import { compare, hash } from "bcrypt";
 import { getAllGroups, insertGroup, insertUsersInGroups, getShowtimes, getMovies, getUsers, getGroupsByUserId, 
         addMovie, addShowtime, newGroup, removeUser, removeSelf, addComment, addJoinRequest, deleteGroup, getRequests,
-        getName, getMemberStatus } from "../models/Groups.js";
+        getName, getMemberStatus, checkJoinRequest, denyJoinRequest, acceptJoinRequest, getComments } from "../models/Groups.js";
 import { ApiError } from "../helpers/ApiError.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
@@ -64,6 +64,15 @@ const getGroupUsers = async (req,res,next) => {
     }
 }
 
+const getGroupComments = async (req,res,next) => {
+    try {
+        const result = await getComments(req.params.groupId,req.params.userId)
+        return res.status(200).json(result.rows)
+    } catch (error) {
+        return next(error)
+    }
+}
+
 const getUsersGroups = async (req,res,next) => {
     try {
         const result = await getGroupsByUserId(req.params.userId)
@@ -118,7 +127,7 @@ const createGroup = async(req,res,next) => {
         if (!req.body.groupname || req.body.groupname.length === 0) return next(new ApiError('Invalid groupname',400))
         if (!req.body.userId) return next(new ApiError('UserId required',400))
         const result = await newGroup(req.body.groupname,req.body.userId)
-        return res.status(200).json(result.rows)
+        return res.status(200).json(result.rows[0])
     } catch (error) {
         return next(error)
     }
@@ -164,22 +173,35 @@ const removeGroup = async (req,res,next) => {
     }
 }
 
-/*
-//kannattaakohan tämä näin tehdä
-const createGroup = async(req,res,next) => {
-    console.log(req.body)
+const checkGroupJoinRequest = async (req,res,next) => {
     try {
-        if (!req.body.groupname || req.body.groupname.length === 0) return next(new ApiError('Invalid groupname',400))
-        if (!req.body.userId) return next(new ApiError('UserId missing',400)) // *******************placeholder
-        const insertGroupResult = await insertGroup(req.body.groupname)
-        const insertUsersInGroupsResult = await insertUsersInGroups(req.body.userId,result1.rows[0].id_group) // syötetään bodyn userid ja insertgroupista saatu id_group
-        return res.status(200).json({ insertGroupResult, insertUsersInGroupsResult })
+        const result = await checkJoinRequest(req.params.groupId,req.params.userId)
+        return res.status(200).json(result.rows[0].exists)
     } catch (error) {
         return next(error)
     }
 }
-*/
+
+const denyGroupJoinRequest = async (req,res,next) => {
+    console.log(req.body,req.params.groupId)
+    try {
+        const result = await denyJoinRequest(req.params.groupId,req.body.userId,req.body.targetUserId)
+        return res.status(200).json(result.rowCount)
+    } catch (error) {
+        return next(error)
+    }
+}
+
+const acceptGroupJoinRequest = async (req,res,next) => {
+    console.log(req.body,req.params.groupId)
+    try {
+        const result = await acceptJoinRequest(req.params.groupId,req.body.userId,req.body.targetUserId)
+        return res.status(200).json(result.rowCount)
+    } catch (error) {
+        return next(error)
+    }
+}
 
 export { getGroups, getUsersGroups, createGroup, getGroupShowtimes, getGroupMovies, getGroupUsers, addMovieToGroup, addShowtimeToGroup,
          removeUserFromGroup, removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests, getGroupName,
-         getMembershipStatus }
+         getMembershipStatus, checkGroupJoinRequest, denyGroupJoinRequest, acceptGroupJoinRequest, getGroupComments }
