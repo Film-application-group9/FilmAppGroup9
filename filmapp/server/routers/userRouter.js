@@ -11,6 +11,6 @@ router.post('/login', postLogin)
 
 router.delete('/delete/:id',auth, deleteUser)
 
-router.get('/',auth, getAllUsers)
+router.get('/', auth, getAllUsers)
 
 export default router

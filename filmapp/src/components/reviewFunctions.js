@@ -20,7 +20,7 @@ const base_url = 'http://localhost:3001/review'
         try{
             let response = await axios.get(base_url + "/user/" + idMovie +"/", {
                 headers:{
-                    Authorization: 'Bearer '+ token
+                    Authorization: token
                 }
             });
             return response.data
@@ -47,7 +47,7 @@ const base_url = 'http://localhost:3001/review'
       const axiosDeleteReview = async(token, idMovie) => {
         try{
             let response = await axios.delete(base_url + '/delete/'+idMovie+"/", {
-                headers: {Authorization: 'Bearer '+token}
+                headers: {Authorization: token}
             })
             return response.data
         }catch(error){
@@ -58,7 +58,7 @@ const base_url = 'http://localhost:3001/review'
       const axiosPatchReview = async(token, idMovie, moviename, stars, comment) => {
         try{
             let response = await axios.patch(base_url + '/update', {
-                headers: {Authorization: 'Bearer '+token},
+                headers: {Authorization: token},
                 idMovie: idMovie,
                 moviename:moviename,
                 stars: stars,
@@ -73,7 +73,7 @@ const base_url = 'http://localhost:3001/review'
       const axiosGetReviews = async(token, idMovie) => {
         try{
             let response = await axios.get(base_url + '/all/'+idMovie, {
-                headers: {Authorization: 'Bearer '+token}
+                headers: {Authorization: token}
             })
             //console.log(response.data)
             return response.data
@@ -101,7 +101,7 @@ const base_url = 'http://localhost:3001/review'
                 stars: stars,
                 comment: comment
             },{
-                headers: {Authorization: 'Bearer '+token}
+                headers: {Authorization: token}
             
             })
             return response.data
