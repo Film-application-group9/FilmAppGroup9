@@ -15,8 +15,8 @@ const MyGroups = () => {
 
 
     useEffect(() => {
-        const idUser = '1';
-        axios.get(`http://localhost:3001/groups/mygroups/${idUser}`)
+      //  const idUser = '1';
+        axios.get(`http://localhost:3001/groups/mygroups/${userId}`)
             .then(response => {
                 if (response.status === 200) {
                     setMyGroups(response.data);
