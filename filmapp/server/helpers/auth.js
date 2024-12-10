@@ -22,7 +22,7 @@ const auth = (req,res,next) => {
             //console.log(decodedUser)
             console.log("User: ",decodedUser.username)
             console.log("UserID: ", decodedUser.id)
-            //const new_token = sign({username: decodedUser.username, id: decodedUser.id},process.env.JWT_SECRET_KEY,{expiresIn: '40m'})
+            const new_token = sign({username: decodedUser.username, id: decodedUser.id},process.env.JWT_SECRET_KEY,{expiresIn: '3m'})
             next()
             return res
                 .header('Access-Control-Expose-Headers','Authorization')

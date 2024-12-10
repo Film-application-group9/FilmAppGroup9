@@ -4,9 +4,10 @@ import { xmlToJson } from './xmlToJSON.js'
 import { AreaList, PVM, AreaID, AlueBool } from './params.js'
 import { JSONtoList } from './JSONtoList.js'
 import "./showtime.css"
+import {axiosUserGroups, axiosMovieToGrou, axiosShowtimeToGroup} from "../components/groupFunctions.js"
+import { timeHandle } from './timeHandle.js'
 
-
-const Showtimes = () =>{
+const Showtimes = ({loggedIn, token, userId}) =>{
     const [json, setJson] = useState(null)
     const [error, setError] = useState(null)
     const [dt, setDt]=useState(null)
@@ -17,7 +18,17 @@ const Showtimes = () =>{
 
     const [alueBool, setAlueBool]=useState(true)
 
+    const [groupInfo, setGroupInfo] = useState(null)
+    const [groupArray, setGroupArray] = useState(null)
 
+    const [areaSelected, setAreaSelected] = useState(null)
+
+    const [showtime, setShowtime] = useState(null)
+    const [movieTitle, setMovieTitle] = useState(null)
+    const [movieOriginalTitle, setMovieOriginalTitle] = useState(null)
+    const [moviePlace, setMoviePlace] = useState(null)
+    
+    //const[selectedGroupValue, setSelectedGroupValue] = useState(null)
 
 
     const axiosShowtimes = async (a, d) => {
@@ -52,12 +63,14 @@ const Showtimes = () =>{
       const area = e.target.value
       AlueBool1(AreaID(area))
       setAreaID(AreaID(area))
+      setAreaSelected(area)
       
     }
 
     const DateMuutos = (e) =>{
 
       setDt(e.target.value)
+
 
     }
 
@@ -84,6 +97,7 @@ const Showtimes = () =>{
               <td>{elokuva.Time}</td>
               <td>{elokuva.Title}</td>
               <td>{elokuva.Place}</td>
+              <td>{loggedIn == true ? <button onClick={() => clickGroup(elokuva.Time, elokuva.Title,elokuva.OriginalTitle, elokuva.Place)}>Add to Group</button>:""}</td>
             </tr>
           ))}
         </tbody>
@@ -92,9 +106,81 @@ const Showtimes = () =>{
   }
   }
 
+  const clickGroup = async (time, title, originalTitle, place) => {
+    try{
+      
+      setMovieTitle(title)
+      setMovieOriginalTitle(originalTitle)
+      if(place == null){
+        place = areaSelected
+      }
+      setMoviePlace(place)
+      const groups = await axiosUserGroups(token, userId)
+      const timestamp = timeHandle (time, dt)
+      setShowtime(timestamp)
+      if(groups.length == 0){
+        setGroupInfo("User has no groups")
+        setGroupArray([])
+
+      }else if(groups.length == 1){
+        
+        
+        
+        
+        
+        
+        //const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, originalTitle, title, userId )
+        const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group, groups[0].groupname)
+        setGroupArray([])
+        setGroupInfo("User has one group, showtime posted to group "+groups[0].id_group)
+        //console.log("clickGroup-groups: ", groups)
+      }else{
+        setGroupInfo("User has multiple group, choose group: ")
+        const grArr = groups.map(g => ({
+          id: g.id_group,
+          name: g.groupname
+      }))
+        setGroupArray(grArr)
+      }
+    }catch(error){
+      console.error(error)
+    }
+    
+  }
+
+  const GroupInformation = () => {
+    const [selectedValue, setSelectedValue] = useState(null)
+    //const [id, setId] = useState(null)
+
+    if(groupArray == null || groupArray.length == 0 || groupArray.length == 1){
+      return(<div><p>{groupInfo}</p></div>)
+    }else{
+      return(<div  id="GroupView"><h2>Choose group: </h2>
+        <div  id="GroupList">
+        <select value={selectedValue}>
+        {groupArray.map(ga => (
+        <option value={ga.id}>{ga.name}</option>
+      ))}</select></div><br/>
+      <button onClick={() => showtimeToGroup(selectedValue)}>Add to Group</button><br></br>
+      <button onClick={() => cancelChoose()}>Cancel add</button>
+      </div>)
+
+  }}
+
+  const showtimeToGroup = async (groupID) => {
+    const postShowtimeToGroup = await axiosShowtimeToGroup(token, groupID, showtime,moviePlace, movieOriginalTitle, movieTitle, userId )
+    setGroupInfo("The showtime has been posted in the group")
+    setGroupArray(null)
+  }
+
+  const cancelChoose = () => {
+    setGroupInfo("The add was canceled")
+    setGroupArray(null)
+  }
 
     return(
       <div>
+        <GroupInformation/>
         <select id="date" onChange={DateMuutos}>
             <option value={""}>Tänään</option> {}
             {dateList.map((option, index) => (
@@ -103,7 +189,7 @@ const Showtimes = () =>{
           </option>
         ))}
             </select>
-            <select id="area" onChange={AreaMuutos}>
+            <select id="area" value={areaSelected} onChange={AreaMuutos}>
             <option value="Kaikki teatterit">Kaikki teatterit</option> {}
             {arealist.map((option, index) => (
             <option key={index} value={option}>

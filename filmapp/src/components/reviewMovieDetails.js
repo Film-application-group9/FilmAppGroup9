@@ -40,4 +40,17 @@ const getMovieDetails = async(token, id) => {
 
 }
 
-export {getMovieByName, getMovieDetails}
+const getCredits = async(token ,id) => {
+    try{    
+        let response = await axios.get(base_url + "/moviecreds/" +id, {
+            headers:{Authorization: 'Bearer '+token},
+            params: {id: id}
+        })
+        return response.data
+        
+    }catch(error){
+        console.error(error)
+    }
+}
+
+export {getMovieDetails, getCredits}

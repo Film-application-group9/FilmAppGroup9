@@ -42,4 +42,13 @@ const movieDescription = async(req,res,next) => {
     res.json({ results: data });
 }
 
-export {movieByName, movieDescription}
+const movieCredits = async(req,res,next) => {
+    const id = req.query.id
+    const apiKey = process.env.TMDB_API_KEY
+    const url = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`
+    const response = await fetch(url)
+    const data = await response.json()
+    res.json({results: data})
+}
+
+export {movieByName, movieDescription, movieCredits}

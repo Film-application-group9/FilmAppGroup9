@@ -13,7 +13,7 @@ const Start = () => {
     const { username } = useUser()
     const { userId } = useUser()
     const { token } = useUser()
-    console.log(username)
+    //console.log(username)
     
     
     return (

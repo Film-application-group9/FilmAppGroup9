@@ -82,11 +82,9 @@ const base_url = 'http://localhost:3001/review'
         }
       }
 
-      const axiosGetStars = async(token, idMovie) => {
+      const axiosGetStars = async(idMovie) => {
         try{
-            let response = await axios.get(base_url + '/stars/'+idMovie, {
-                headers: {Authorization: 'Bearer '+token}
-            })
+            let response = await axios.get(base_url + '/stars/'+idMovie)
             //console.log("axiosGetStars")
             //console.log(response.data)
             return response.data
@@ -111,6 +109,17 @@ const base_url = 'http://localhost:3001/review'
             console.error(error)
         }
       }
+      
+      /*const axiosCheckUser = async(token, id) => {
+        let response = await axios.get(base_url + '/checkuser', {
+            headers:{
+                Authorization: 'Bearer '+ token
+            },
+            params: {userID: id}
+        })
+        return response.data
+      }*/
+
       
     
       export {axiosUserReview, axiosPostReview ,axiosDeleteReview, axiosPatchReview, axiosGetReviews, axiosGetStars, axiosNewReview}
