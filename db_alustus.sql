@@ -12,7 +12,7 @@ drop table if exists public.groups cascade;
 drop table if exists public.reviews cascade;
 drop table if exists public.users_in_groups cascade;
 
-
+SET TIME ZONE 'EET';
 
 CREATE TABLE IF NOT EXISTS public.accounts
 (
@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS public.group_movies
     id_group integer,
     id_movie integer,
     moviename character varying(255) COLLATE pg_catalog."default",
+	moviename_original character varying(255), 
     CONSTRAINT group_movies_id_movie_id_group_key UNIQUE (id_movie, id_group)
 );
 
@@ -60,9 +61,11 @@ CREATE TABLE IF NOT EXISTS public.group_showtimes
     id_showtime integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     id_group integer,
     showtime timestamp without time zone,
-    id_movie integer,
-    moviename character varying(255) COLLATE pg_catalog."default",
+    place character varying(255),
+    moviename_original character varying(255) COLLATE pg_catalog."default",
+    moviename_finnish character varying(255),
     CONSTRAINT "groupShowtimes_pkey" PRIMARY KEY (id_showtime)
+	UNIQUE (showtime, place, moviename_original)
 );
 
 CREATE TABLE IF NOT EXISTS public.groups
@@ -78,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public.reviews
     id_review integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     id_user integer,
     id_movie integer,
-    date timestamp AT time zone EET,
+    date timestamp with TIME ZONE,
     moviename character varying(255) COLLATE pg_catalog."default",
     stars integer,
     comment text COLLATE pg_catalog."default",

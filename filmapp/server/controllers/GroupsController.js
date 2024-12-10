@@ -85,7 +85,7 @@ const getPendingRequests = async (req,res,next) => {
 const addMovieToGroup = async (req,res,next) => {
     console.log(req.body,req.params.groupId)
     try {
-        const result = await addMovie(req.params.groupId, req.body.movieId, req.body.userId)
+        const result = await addMovie(req.params.groupId, req.body.movieId, req.body.userId, req.body.moviename, req.body.movienameORIG)
         return res.status(200).json(result.rowCount)
     } catch (error) {
         return next(error)
@@ -93,9 +93,9 @@ const addMovieToGroup = async (req,res,next) => {
 }
 
 const addShowtimeToGroup = async (req,res,next) => {
-    console.log(req.body,req.params.groupId)
+    //console.log(req.body,req.params.groupId)
     try {
-        const result = await addShowtime(req.params.groupId, req.body.showtime, req.body.movieId, req.body.userId)
+        const result = await addShowtime(req.params.groupId, req.body.showtime, req.body.place, req.body.userId, req.body.movienameORIG, req.body.movienameFI)
         return res.status(200).json(result.rowCount)
     } catch (error) {
         return next(error)

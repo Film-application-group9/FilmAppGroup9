@@ -7,3 +7,17 @@
 td{
     padding: 7px;
 }
+
+#GroupList{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 20px;
+    margin-bottom: 10px;
+    width: 220px;
+}
+
+#GroupView{
+    
+}
+

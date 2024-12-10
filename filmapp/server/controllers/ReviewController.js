@@ -1,22 +1,28 @@
-import {userEmail, reviewExists, insertReview, deleteReview, updateReview, showAllReviews, starsAverage} from '../models/review.js'
+import {reviewExists, insertReview, deleteReview, updateReview, showAllReviews, starsAverage} from '../models/review.js'
 import dotenv from 'dotenv';
 import decodeTokenUser from '../helpers/jwt_decode.js';
 
 
 dotenv.config()
 
-//Testattu
-/*const getEmail = async (req,res,next) => {
+const getAuth = async(req,res,next) => {
     try{
         const authHeader = req.headers.authorization
-        const id = parseInt(req.params.idUser)
-        const result = await userEmail(id)
-        //console.log(result)
-        return res.status(200).json(result.rows)
+        const decodedUser = decodeTokenUser(authHeader)
+        const decodedUserID = decodedUser.id
+        const givenID = req.params.userID
+        console.log("getAuth-decodedUserID: ", decodedUserID)
+        console.log("getAuth-givenID: ", givenID)
+        if(decodedUserID == givenID){
+            return res.json({Authentication: "Ok"})
+        }else{
+            return res.json({Authentication: "Not ok"})
+        }
     }catch(error){
         return next(error)
     }
-}*/
+    
+}
 
 
 const getReview = async (req,res,next) => {
@@ -110,4 +116,4 @@ const newReview = async(req,res,next) => {
     }
 }
 
-export {getReview, postReview, removeReview, replaceReview, showReviews, showAvgStars, newReview}
+export {getAuth, getReview, postReview, removeReview, replaceReview, showReviews, showAvgStars, newReview}

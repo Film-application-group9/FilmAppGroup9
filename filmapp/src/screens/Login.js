@@ -33,6 +33,7 @@ function Login() {
             //setToken(response.data.token)
             setToken(readAuthorizationHeader(response))
             setUserId(response.data.id)
+            //console.log("Login-userID: ", )
             sessionStorage.setItem('token', readAuthorizationHeader(response))
             //navigate('/start',{state: {username: username}})
             navigate('/start')
