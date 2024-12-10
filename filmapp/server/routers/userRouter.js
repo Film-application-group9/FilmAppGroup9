@@ -9,7 +9,7 @@ router.post('/register', postRegistration)
 
 router.post('/login', postLogin)
 
-router.delete('/delete/:id', auth, deleteUser)
+router.delete('/delete/:id',auth, deleteUser)
 
 router.get('/',auth, getAllUsers)
 
