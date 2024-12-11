@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { pool } from '../helpers/db.js';
 import jwt from 'jsonwebtoken';
+
 dotenv.config();
 
 const getProfile = async (req, res) => {

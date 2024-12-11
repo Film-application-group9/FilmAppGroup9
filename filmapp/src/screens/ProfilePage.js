@@ -41,7 +41,7 @@ const ProfilePage = () => {
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(profileUrl).then(() => {
-            alert('Profile link copied to clipboard');
+            alert('Profile link copied to clipboard!');
         }).catch(err => {
             console.error('Failed to copy: ', err);
         });
@@ -49,7 +49,7 @@ const ProfilePage = () => {
 
     return (
         <div>
-            <h1>Profile</h1>
+            <h1>{user.username}'s Profile</h1>
             {user.username && (
                 <div>
                     <label>
@@ -72,7 +72,7 @@ const ProfilePage = () => {
                 </div>
             )}
             <div>
-                <h2 style={{ float: 'inherit' }}>Search profiles</h2>
+                <h2 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Search profiles</h2>
                 <form onSubmit={handleSearch}>
                     <input 
                         type="text" 
