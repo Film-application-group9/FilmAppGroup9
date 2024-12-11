@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, useParams, BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from '../context/useUser.js';
-
+import { parseDate } from "../components/parseDate.js"
 
 const GroupComments = () => {
 
@@ -10,6 +10,7 @@ const GroupComments = () => {
     const navigate = useNavigate();
     const { group_id } = useParams();
     const { userId } = useUser();
+    const { username } = useUser();
     const [newComment, setNewComment] = useState('');
 
     // const [isReady, setIsReady] = useState(false);
@@ -52,7 +53,8 @@ const GroupComments = () => {
 
         axios.post(url + `/groups/${group_id}/addcomment`, {
             userId: userId,
-            commentText: newComment
+            commentText: newComment,
+            username: username
         },)
             .then(response => {
                 console.log(response.data)
@@ -62,17 +64,14 @@ const GroupComments = () => {
                 alert(error.response.data.error ? error.response.data.error : error)
             })
     };
-
+/*
     const parseDate = (isoString) => {
         const date = new Date(isoString);
-
-        // Format date and time
         const formattedDate = date.toLocaleDateString('en-GB'); // dd/mm/yyyy
         const formattedTime = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); // hh:mm
-
         return `${formattedDate.replace(/\//g, '.')} ${formattedTime}`;
     };
-
+*/
     return (
         <div>
             <div id='comments' style={{ border: '1px solid black', padding: '20px' }}>
@@ -80,7 +79,7 @@ const GroupComments = () => {
                 {
                     groupComments.map(item => (
                         <li key={item.comment_time}>
-                            {parseDate(item.comment_time)} {item.id_user} {item.comment_text}
+                            {parseDate(item.comment_time)} {item.username} {item.comment_text}
                         </li>
                     ))
                 }

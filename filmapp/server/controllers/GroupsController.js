@@ -114,7 +114,7 @@ const addShowtimeToGroup = async (req,res,next) => {
 const addCommentToGroup = async (req,res,next) => {
     console.log(req.body,req.params.groupId)
     try {
-        const result = await addComment(req.params.groupId, req.body.userId, req.body.commentText)
+        const result = await addComment(req.params.groupId, req.body.userId, req.body.commentText, req.body.username)
         return res.status(200).json(result.rowCount)
     } catch (error) {
         return next(error)

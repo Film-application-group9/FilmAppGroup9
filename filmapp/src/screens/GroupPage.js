@@ -3,6 +3,8 @@ import { useNavigate, Routes, Route, useParams, BrowserRouter } from 'react-rout
 import axios from 'axios';
 import { useUser } from '../context/useUser.js';
 import GroupComments from '../components/GroupComments.js';
+import '../styles/GroupPage.css'
+import {parseDate} from "../components/parseDate.js"
 
 const url = 'http://localhost:3001'
 
@@ -322,28 +324,40 @@ const GroupPage = () => {
 
                     <div id='groupmovies' style={{ border: '1px solid black', padding: '20px' }}>
                         <h2>Movie recommendations</h2>
+                        <div id='moviecardscontainer'>
                         {
                             groupMovies.map(item => (
-                                <li key={item.id_movie}>
-                                    {item.moviename}
-                                </li>
+                                <div className='moviecard' key={item.id_movie} onClick={() => navigate(`/movies?id=${item.id_movie}`)}>
+                                    <img src={item.img_path} alt='Poster'/>
+                                    <div className='moviecardtext'>
+                                    <div><b>{item.moviename}</b></div>
+                                        <div>{item.moviename !== item.moviename_original && ` (${item.moviename_original})`}</div>
+                                    </div>
+                                </div>
                             ))
                         }
+                        </div>
                     </div>
 
                     <div id='showtimes' style={{ border: '1px solid black', padding: '20px' }}>
                         <h2>Coming attractions</h2>
                         {
-                            groupShowtimes.map(item => (
-                                <li key={item.id_movie}>
-                                    {item.moviename} {item.showtime}
-                                </li>
-                            ))
+      <table id='showtimestable'>
+      <tbody>
+        {groupShowtimes.map(item => (
+          <tr>
+            <td>{item.moviename_finnish}{item.moviename_finnish !== item.moviename_original && ` (${item.moviename_original})`}</td>
+            <td>{item.place}</td>
+            <td>{parseDate(item.showtime)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
                         }
                     </div>
 
                     <div id='comments'>
-                    <GroupComments />
+                        <GroupComments />
                     </div>
 
                 </div>
