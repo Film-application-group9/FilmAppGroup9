@@ -107,6 +107,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
   }
 
   const clickGroup = async (time, title, originalTitle, place) => {
+
     try{
       
       setMovieTitle(title)
@@ -130,7 +131,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
         
         
         //const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, originalTitle, title, userId )
-        const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group, groups[0].groupname)
+        const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
         setGroupArray([])
         setGroupInfo("User has one group, showtime posted to group "+groups[0].id_group)
         //console.log("clickGroup-groups: ", groups)
@@ -149,25 +150,40 @@ const Showtimes = ({loggedIn, token, userId}) =>{
   }
 
   const GroupInformation = () => {
-    const [selectedValue, setSelectedValue] = useState(null)
-    //const [id, setId] = useState(null)
+    const [selectedValue, setSelectedValue] = useState("No group selected")
+
+    useEffect(() => {
+      if(groupArray != null){
+        if(groupArray.length > 0){
+          setSelectedValue(groupArray[0].id)
+        }
+      }
+        
+    }, [groupArray])
+    
+    const handleClick = () => {
+      console.log("Selected value: ", selectedValue)
+    }
 
     if(groupArray == null || groupArray.length == 0 || groupArray.length == 1){
       return(<div><p>{groupInfo}</p></div>)
     }else{
-      return(<div  id="GroupView"><h2>Choose group: </h2>
+      return(<div  id="GroupView">{selectedValue}<h2>Choose group: </h2>
         <div  id="GroupList">
-        <select value={selectedValue}>
-        {groupArray.map(ga => (
+        <select id="GroupInfo" value={selectedValue} onChange={(e) => setSelectedValue(e.target.value)}>
+        {groupArray.map((ga,index) => (
+        
+        
         <option value={ga.id}>{ga.name}</option>
-      ))}</select></div><br/>
-      <button onClick={() => showtimeToGroup(selectedValue)}>Add to Group</button><br></br>
+  ))}</select></div><br/>
+      <button onClick={() => showtimeToGroup(selectedValue)}  >Add to Group</button><br></br>
       <button onClick={() => cancelChoose()}>Cancel add</button>
       </div>)
 
   }}
 
   const showtimeToGroup = async (groupID) => {
+    console.log("Showtimetogroup ", groupID)
     const postShowtimeToGroup = await axiosShowtimeToGroup(token, groupID, showtime,moviePlace, movieOriginalTitle, movieTitle, userId )
     setGroupInfo("The showtime has been posted in the group")
     setGroupArray(null)

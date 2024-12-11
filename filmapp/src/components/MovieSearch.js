@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useHistory } from 'react-router-dom';
 import { Showtimes } from '../showtimes/showtimes.js';
@@ -27,6 +27,7 @@ const MovieSearch = () => {
 
     const [groupInfo, setGroupInfo] = useState(null)
     const [severalGroupsState, setSeveralGroupsState] = useState(null)
+    const [imgPath, setImgPath] = useState(null)
 
     // placeholder for auth status
     
@@ -97,11 +98,11 @@ const MovieSearch = () => {
       
         return(<button onClick={handleClick}>See reviews</button>)
     }
-    const GroupButton = ({idMovie, moviename, origMoviename}) => {
-        return(<button onClick={() => AddToGroupButton(idMovie, moviename, origMoviename)}>Add to Group</button>)
+    const GroupButton = ({idMovie, moviename, origMoviename, imgPath}) => {
+        return(<button onClick={() => AddToGroupButton(idMovie, moviename, origMoviename, imgPath)}>Add to Group</button>)
     }
 
-    const AddToGroupButton = async (idMovie, moviename, origMoviename) => {
+    const AddToGroupButton = async (idMovie, moviename, origMoviename, imgPath) => {
         //token ok
         //idGroup lisävalinta
         if(moviename != null){
@@ -111,6 +112,7 @@ const MovieSearch = () => {
         //userId ok
         setMoviename(moviename)
         setOrigMoviename(origMoviename)
+        setImgPath(imgPath)
         try{
         const groups = await axiosUserGroups(token, userId)
         if(groups.length == 0){
@@ -118,7 +120,7 @@ const MovieSearch = () => {
             setGroupArray([])
         }else if(groups.length == 1){
             const idGroup = groups[0].id_group
-            const add = await axiosMovieToGroup(token, idGroup, idMovie, userId, moviename, origMoviename)
+            const add = await axiosMovieToGroup(token, idGroup, idMovie, userId, moviename, origMoviename, imgPath)
             setGroupInfo("Movie has been added to user's group")
             setGroupArray([])
         }else{
@@ -138,14 +140,25 @@ const MovieSearch = () => {
         setGroupInfo("The add was canceled")
     }
     const ChooseFromManyGroups = ({id}) => {
-        const [groupChosen, setGroupChosen] = useState(null)
+        const [groupChosen, setGroupChosen] = useState("No group selected")
+
+        useEffect(() => {
+            if(groupArray != null){
+              if(groupArray.length > 0){
+                setGroupChosen(groupArray[0].id_group)
+              }
+            }
+              
+          }, [groupArray])
+
+        
         //console.log("ChooseFromManyGroups-id's", id," ",movieIdChosen)
         if(movieIdChosen == id ){
             console.log("Osuma")
         if(groupArray == null ||groupArray.length == 0){
             return(<div>{groupInfo}</div>)
         }else{
-            return(<div><h3>Choose group: </h3><select value={groupChosen}>
+            return(<div><h3>Choose group: </h3><select value={groupChosen} onChange={(e) => setGroupChosen(e.target.value)}>
                 {groupArray.map(ga => (
                     <option value={ga.id_group}>{ga.groupname}</option>
                 ))}
@@ -161,7 +174,13 @@ const MovieSearch = () => {
 
     const postToGroupFromMany = async(groupID) => {
         try{
-            const movieToGroup = await axiosMovieToGroup(token, groupID, movieIdChosen, moviename, origMoviename )
+            console.log("postToGroupFromMany-token", token)
+            console.log("postToGroupFromMany-groupID", groupID)
+            console.log("postToGroupFromMany-movieIdChosen", movieIdChosen)
+            console.log("postToGroupFromMany-moviename", moviename)
+            console.log("postToGroupFromMany-origMoviename", origMoviename)
+            console.log("postToGroupFromMany-imgpath", imgPath)
+            const movieToGroup = await axiosMovieToGroup(token, groupID, movieIdChosen,userId, moviename, origMoviename, imgPath )
             setGroupInfo("Movie added to your group")
             setGroupArray([])
         }catch(error){
@@ -256,7 +275,8 @@ const MovieSearch = () => {
                                  {isLoggedIn && <div><button onClick={() => addFavorite(movie.id, movie.title)}>Add to favorites</button>
                                  </div>} 
                                  <ToReviewsButton id={movie.id}/>
-                                 {isLoggedIn  && <div><GroupButton idMovie={movie.id} moviename={movie.title} origMoviename={movie.original_title}/>
+                                 {isLoggedIn  && <div><GroupButton idMovie={movie.id} moviename={movie.title} origMoviename={movie.original_title}
+                                 imgPath={movie.poster_path}/>
                                 <ChooseFromManyGroups id={movie.id}/></div>}
                                 
                             </li>

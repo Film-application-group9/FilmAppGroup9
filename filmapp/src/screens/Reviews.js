@@ -68,6 +68,8 @@ const Reviews = () => {
     const[groupArray, setGroupArray] = useState()
 
     const [noImage, setNoImage]=useState(null)
+
+    const[imgPath, setImgPath]=useState(null)
     
 
     //setIdMovie(req.query.id)
@@ -199,7 +201,7 @@ const Reviews = () => {
                     const duration_formatted = DurationFormat(duration)
                     const countries = results.production_countries
                     const countryArray = countries.map(c => c.name)
-
+                    setImgPath(posterPath)
                     setMoviename(title)
                     setIdMovie(id)
                     setMoviename_original(origTitle)
@@ -442,7 +444,7 @@ const Reviews = () => {
             setSeveralGroupsState(false)
         }else if(groups.length == 1){
             const groupID = groups[0].id_group
-            const movieToGroup = await axiosMovieToGroup(token, groupID, idMovie, userId, moviename, moviename_original )
+            const movieToGroup = await axiosMovieToGroup(token, groupID, idMovie, userId, moviename, moviename_original, imgPath )
             setGroupData("Movie added to your group")
             setSeveralGroupsState(false)
         }else{
@@ -462,7 +464,7 @@ const Reviews = () => {
 
     const postToGroupFromMany =async (groupID) => {
         try{
-            const movieToGroup = await axiosMovieToGroup(token, groupID, idMovie, userId, moviename, moviename_original )
+            const movieToGroup = await axiosMovieToGroup(token, groupID, idMovie, userId, moviename, moviename_original, imgPath )
             setGroupData("Movie added to your group")
             setSeveralGroupsState(false)
         }catch(error){
@@ -477,7 +479,16 @@ const Reviews = () => {
 
     const GroupInformation = () => {
         console.log("groupInformation-groupdata: ", groupData)
-        const [selectedValue, setSelectedValue] = useState(null)
+        const [selectedValue, setSelectedValue] = useState("No group selected")
+
+        useEffect(() => {
+            if(groupArray != null){
+              if(groupArray.length > 0){
+                setSelectedValue(groupArray[0].id)
+              }
+            }
+              
+          }, [groupArray])
 
         if(SeveralGroupsState == false){
             if(groupData == null){
@@ -488,12 +499,12 @@ const Reviews = () => {
         }else{
             return(<div id="GroupInfo">
                 <h3>Choose group: </h3>
-                <select id="select_group"value={selectedValue}>
+                <select id="select_group"value={selectedValue} onChange={(e) => setSelectedValue(e.target.value)}>
                 {groupArray.map(ga => (
                  <option className="groups" value={ga.id}>{ga.name}</option>
                  ))}
                 </select><br></br>
-                <button onClick={(e) => {postToGroupFromMany(selectedValue);}}>Select group</button><br></br>
+                <button onClick={(e) => {postToGroupFromMany(selectedValue)}}>Select group</button><br></br>
                 <button onClick={() => cancelChoose()}>Cancel add</button>
             </div>)
             /*return(<div><ul>{groupArray.map((item, index) => {

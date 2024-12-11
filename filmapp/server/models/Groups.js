@@ -74,8 +74,8 @@ const insertUsersInGroups = async (userId, groupId) => {
     return await pool.query('INSERT INTO users_in_groups (users_id_user, groups_id_group) VALUES ($1,$2) RETURNING *', [userId, groupId])
 }
 
-const addMovie = async (groupId, movieId, userId, moviename, moviename_original) => {
-    return await pool.query('INSERT INTO group_movies (id_group, id_movie, moviename, moviename_original) SELECT $1, $2, $4, $5 WHERE EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user = $3 AND groups_id_group = $1)', [groupId, movieId, userId, moviename, moviename_original])
+const addMovie = async (groupId,movieId,userId, moviename, moviename_original, imgPath) => {
+    return await pool.query('INSERT INTO group_movies (id_group, id_movie, moviename, moviename_original, img_path) SELECT $1, $2, $4, $5, $6 WHERE EXISTS (SELECT 1 FROM users_in_groups WHERE users_id_user = $3 AND groups_id_group = $1)',[groupId,movieId,userId, moviename, moviename_original, imgPath])
 }
 
 const addShowtime = async (groupId, Showtime, place, userId, moviename_orig, moviename_finnish) => {
