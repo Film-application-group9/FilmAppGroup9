@@ -11,13 +11,14 @@ const axiosUserGroups = async(token, idUser) =>{
     }
   }
 
-const axiosMovieToGroup = async(token, idGroup, idMovie, idUser, moviename, moviename_orig) => {
+const axiosMovieToGroup = async(token, idGroup, idMovie, idUser, moviename, moviename_orig, imgPath) => {
     try{
         const response = await axios.post(base_url + '/' + idGroup + '/addMovie', {
             movieId: idMovie,
             userId: idUser,
             moviename: moviename,
-            movienameORIG: moviename_orig
+            movienameORIG: moviename_orig,
+            imgPath: imgPath
         })
         return response.data
     }catch(error){
@@ -31,6 +32,7 @@ const axiosShowtimeToGroup = async(token, idGroup, showtime, place, original_mov
     console.log("axiosShowtimeToGroup-idUser", idUser )
     console.log("axiosShowtimeToGroup-moviename_original", original_moviename )
     console.log("axiosShowtimeToGroup-moviename_finnish", finnish_moviename)
+    console.log("axiosShowtimeToGroup-idGroup: ", idGroup)
     try{
         
         const response = await axios.post(base_url + '/' + idGroup + '/addshowtime', {
