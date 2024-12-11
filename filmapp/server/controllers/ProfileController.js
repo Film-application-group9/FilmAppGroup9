@@ -1,68 +1,53 @@
 import dotenv from "dotenv";
-import decodeTokenUser from '../helpers/jwt_decode.js';
-
+import { pool } from '../helpers/db.js';
+import jwt from 'jsonwebtoken';
 dotenv.config();
 
-const getProfile = async (req, res, next) => {
+const getProfile = async (req, res) => {
     try {
         const authHeader = req.headers.authorization;
-        const decodedUser = decodeTokenUser(authHeader);
+        const token = authHeader.split(' ')[1];
+        const decodedUser = jwt.verify(token, process.env.JWT_SECRET_KEY);
         const userId = decodedUser.id;
 
-        // mock user profile
-        const userProfile = {
-            userId,
-            username: "testuser",
-            email: "testuser@example.com",
-            bio: "This is a test user."
-        };
+        console.log(`Fetching profile for user ID: ${userId}`);
 
-        res.status(200).json(userProfile);
+        const result = await pool.query('SELECT id, username FROM accounts WHERE id = $1', [userId]);
+        if (result.rows.length > 0) {
+            res.status(200).json(result.rows[0]);
+        } else {
+            res.status(404).send('Profile not found');
+        }
     } catch (error) {
         console.error('Error fetching profile:', error);
         res.status(500).send('Server error');
     }
 };
-const getProfileByUsername = async (req, res, next) => {
+
+const getProfileByIdOrUsername = async (req, res) => {
     try {
         const { username } = req.params;
 
-        // mock user profile
-        const userProfile = {
-            userId: 1,
-            username,
-            email: `${username}@example.com`,
-            bio: `My name is ${username} and this is my profile`
-            
-        };
+        console.log(`Fetching profile for username: ${username}`);
 
-        res.status(200).json(userProfile);
+        let result;
+        if (isNaN(username)) {
+            // by username
+            result = await pool.query('SELECT id, username FROM accounts WHERE username = $1', [username]);
+        } else {
+            // by id
+            result = await pool.query('SELECT id, username FROM accounts WHERE id = $1', [username]);
+        }
+
+        if (result.rows.length > 0) {
+            res.status(200).json(result.rows[0]);
+        } else {
+            res.status(404).send('Profile not found');
+        }
     } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error('Error fetching profile by username:', error);
         res.status(500).send('Server error');
     }
 };
 
-const updateProfile = async (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
-        const decodedUser = decodeTokenUser(authHeader);
-        const userId = decodedUser.id;
-        const { username, email, bio } = req.body;
-
-        // mock updated profile
-        const updatedProfile = {
-            userId,
-            username,
-            email,
-            bio
-        };
-
-        res.status(200).json(updatedProfile);
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).send('Server error');
-    }
-};
-
-export { getProfile, updateProfile, getProfileByUsername };
+export { getProfile, getProfileByIdOrUsername };

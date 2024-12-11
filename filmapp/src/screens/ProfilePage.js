@@ -1,93 +1,94 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useUser } from "../context/useUser.js";
+import { useUser } from '../context/useUser.js';
 
 const ProfilePage = () => {
     const navigate = useNavigate();
-    const { token } = useUser();
+    const { token } = useUser() || {};
     const { username } = useParams();
-    const [user, setUser] = useState({ username: '', email: '', bio: ''});
+    const [user, setUser] = useState({ username: '' });
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const url = username ? `http://localhost:3001/profiles/${username}` : 'http://localhost:3001/profiles/me';
+                console.log(`Fetching profile from URL: ${url}`); 
                 const headers = username ? {} : { 'Authorization': `Bearer ${token}` };
                 const response = await axios.get(url, { headers });
                 if (response.status === 200) {
                     setUser(response.data);
                 } else {
-                    alert('Failed to fetch profile');
+                    alert('Profile not found');
                 }
             } catch (error) {
                 console.error('Error fetching profile:', error);
-                alert('Failed to fetch profile');
+                alert('Profile not found');
             }
         };
 
         fetchProfile();
     }, [token, username]);
 
-    const handleUpdate = async () => {
-        try {
-            const response = await axios.patch('http://localhost:3001/profiles/me', user, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            if (response.status === 200) {
-                alert('Profile updated successfully');
-            } else {
-                alert('Failed to update profile');
-            }
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('Failed to update profile');
-        }
+    const handleSearch = (event) => {
+        event.preventDefault();
+        const searchUsername = event.target.elements.username.value; 
+        console.log(`Navigating to profile: /profiles/${searchUsername}`); 
+        navigate(`/profiles/${searchUsername}`);
+    };
+
+    const profileUrl = username ? `http://localhost:3000/profiles/${username}` : '';
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(profileUrl).then(() => {
+            alert('Profile link copied to clipboard');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
     };
 
     return (
         <div>
             <h1>Profile</h1>
-            <label>
-                Username:
-                <input
-                    type="text"
-                    value={user.username}
-                    onChange={(e) => setUser({ ...user, username: e.target.value })}
-                    disabled={!!username} 
-                />
-            </label>
-            <label>
-                Email:
-                <input
-                    type="email"
-                    value={user.email}
-                    onChange={(e) => setUser({ ...user, email: e.target.value })}
-                    disabled={!!username} // Disable editing if viewing another user's profile
-                />
-            </label>
-            <label>
-                Bio:
-                <textarea
-                    value={user.bio}
-                    onChange={(e) => setUser({ ...user, bio: e.target.value })}
-                    disabled={!!username} // Disable editing if viewing another user's profile
-                />
-            </label>
-            
-            {!username && <button onClick={handleUpdate}>Update Profile</button>}
-            <button onClick={() => navigate(-1)}>Return</button>
+            {user.username && (
                 <div>
-                    <h2>Search profiles</h2>
-                    <input type="text" id="username" placeholder="Search by username" />
-                    <button type="button" onClick={() => navigate(`/profiles/${document.getElementById('username').value}`)}>
-                        Search
-                    </button>
+                    <label>
+                        Username:
+                        <br />
+                        <input
+                            style={{ marginLeft: '10px', fontWeight: 'bold' }}
+                            type="text"
+                            value={user.username} 
+                            onChange={(e) => setUser({ ...user, username: e.target.value })}
+                            disabled={!!username} 
+                        />
+                    </label>
                 </div>
+            )}
+            <button onClick={() => navigate(-1)}>Return</button>
+            {username && (
+                <div>
+                    <button onClick={copyToClipboard}>Copy link to profile</button>
+                </div>
+            )}
+            <div>
+                <h2 style={{ float: 'inherit' }}>Search profiles</h2>
+                <form onSubmit={handleSearch}>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Search by username or ID" 
+                    />
+                    <input 
+                        type="submit" 
+                        id='searchProfileBtn' 
+                        value="View profile"
+                    />
+                </form>
             </div>
-        );
-    };
+        </div>
+    );
+};
 
 export default ProfilePage;

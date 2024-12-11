@@ -43,13 +43,12 @@ function App() {
           <Route exact path="/tokenTest" element={<TokenTest />} />
           <Route exact path="/" element={<MovieSearch />} />
           <Route exact path="/favorites" element={<FavoritesList />} />
-          <Route exact path="/movies" element={<Reviews/>}/>
-          <Route exact path="/groups" element={<Groups />} />
           <Route exact path="/movies" element={<Reviews />} />
+          <Route exact path="/groups" element={<Groups />} />
           <Route exact path="/mygroups" element={<MyGroups />} />
           <Route exact path="/groups/:group_id" element={<GroupPage />} />
           <Route exact path="/profiles/me" element={<ProfilePage />} />
-          <Route exact path="/profiles/:username" element={<ProfilePage />} />
+          <Route exact path="/profiles/:username" element={<ProfilePage />} /> {/* Updated route */}
         </Routes>
       </Router>
     </UserProvider>
