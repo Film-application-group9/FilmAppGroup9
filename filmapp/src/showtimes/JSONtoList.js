@@ -17,7 +17,9 @@ const JSONtoList = (obj, alueBool) =>{
             let index = showtime.indexOf("T")
             let time = showtime.substring(index+1)
             json_obj["Time"] = time
-            
+            let originalTitle =show.children.find(item => item.name == "OriginalTitle")
+
+            json_obj["OriginalTitle"] = (originalTitle.value)
             if(alueBool == true){
                 let children4 =show.children.find(item => item.name == "Theatre")
                 let place = children4.value
