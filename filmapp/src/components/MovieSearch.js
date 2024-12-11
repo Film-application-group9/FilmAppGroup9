@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Showtimes } from '../showtimes/showtimes.js';
 import { useUser } from "../context/useUser.js";
 
