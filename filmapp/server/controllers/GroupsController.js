@@ -94,7 +94,7 @@ const getPendingRequests = async (req,res,next) => {
 const addMovieToGroup = async (req,res,next) => {
     console.log(req.body,req.params.groupId)
     try {
-        const result = await addMovie(req.params.groupId, req.body.movieId, req.body.userId, req.body.moviename, req.body.movienameORIG)
+        const result = await addMovie(req.params.groupId, req.body.movieId, req.body.userId, req.body.moviename, req.body.movienameORIG, req.body.imgPath)
         return res.status(200).json(result.rowCount)
     } catch (error) {
         return next(error)
