@@ -20,7 +20,7 @@ const updateReview = async (id_user, id_movie, moviename, stars, comment) => {
 }
 
 const showAllReviews = async(idMovie) => {
-    return await pool.query("select *, to_char(date, 'DD.MM.YYYY HH24:MI:SS') from reviews INNER JOIN accounts ON reviews.id_user = accounts.id where id_movie = $1 AND comment <> ''", [idMovie])
+    return await pool.query("select *, to_char(date, 'DD.MM.YYYY HH24:MI:SS') from reviews INNER JOIN (select id, username from accounts) accounts ON reviews.id_user = accounts.id where id_movie = $1 AND comment <> ''", [idMovie])
 }
 
 
