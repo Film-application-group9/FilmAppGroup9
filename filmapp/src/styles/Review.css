@@ -1,0 +1,398 @@
+:root{
+    --corner_radius: 10px;
+    --margin_general: 10px;
+    --poster-width: 100px;
+}
+
+
+#div_main{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 1000px;
+    background-color: rgb(66, 102, 136);
+    border-style: solid;
+    border-color: black;
+    border-radius:var(--corner_radius);
+    
+}
+
+#groupData{
+    margin-left: var(--margin_general);
+}
+
+#PosterImg{
+    margin: auto;
+}
+
+.ShowMovieDetails{
+    border-style: solid;
+    border-color: black;
+    border-radius: var(--corner_radius);
+    margin: 10px;
+    display: grid;
+    grid-template-areas:
+      'poster main main main right'
+      'poster details details details  right';
+    
+}
+
+#details{
+    grid-area: details;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: var(--margin_general);
+    
+
+}
+
+#AddButtons{
+    position: relative;
+    grid-area: buttons;
+    margin: var(--margin_general);
+}
+
+#spoken_languages{
+    position: relative;
+    grid-area: spl;
+    padding-left: var(--margin_general);
+}
+
+#Genres{
+    position: relative;
+    grid-area: genres;
+    padding-left: var(--margin_general);
+    
+}
+
+#RelDate{
+    position: relative;
+    grid-area: relDate;
+    padding-left: var(--margin_general);
+    padding-right: var(--margin_general);
+}
+
+#Poster{
+    grid-area: poster;
+    margin-left: var(--margin_general);
+    margin-right: var(--margin_general);
+    margin-top: var(--margin_general);
+    
+}
+
+#Title_and_rating_and_description{
+    position: relative;
+    grid-area: main;
+    padding-left: var(--margin_general);
+    padding-right: var(--margin_general);
+
+
+}
+
+.Title{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+
+.ReviewBox{
+    overflow-y: auto;
+    height: 100px;
+    margin:10px;
+    position: relative;
+    
+}
+
+#AllReviewHeader{
+    margin-left: 10px;
+}
+
+.review{
+    border-style: solid;
+    border-color: black;
+    background-color: lightblue;
+}
+
+.reviewUser{
+    border-style: solid;
+    border-color: black
+}
+
+.div_user{
+    position: absolute;
+    top: 20;
+    left: 10;
+ 
+}
+
+.div_date{
+    position: absolute;
+    top: 20;
+    right: 0;
+
+}
+
+.UserSpan{
+    font-weight: bold;
+}
+
+.span_director{
+    font-weight: bold;
+}
+
+
+#div_3{
+    display: flex;
+    flex-direction: row;
+}
+
+#div_2{
+    border-style: solid;
+}
+
+#div_review_field{
+    position: relative;
+    margin: 10px;
+}
+
+#UserReview{
+    position: relative;
+    margin: 10px;
+
+}
+
+#delReview{
+    width: fit-content;
+    height: fit-content;
+}
+
+.urOwnReview{
+    width: 200px;
+    height: 40px;
+}
+
+#EmptyOwnReview{
+    margin: 10px;
+}
+
+#EmptyAllReviews{
+    margin: 10px;
+}
+
+#UserReviewBox{
+    grid-area: review;
+    width: 100%;
+}
+
+#reviewArea{
+    display: flex;
+    flex-direction: column;
+
+}
+
+#reviewArea{
+    margin-top: 10px;
+    border-style: solid;
+    border-color: black;
+}
+
+#comment{
+    resize: none;
+    background-color: lightblue;
+    
+}
+
+#div_review{
+
+}
+
+#RevFieldsNoReg{
+    margin: 10px;
+}
+
+#groupBullets{
+    list-style-type: none;
+}
+
+#Cast{
+    position: absolute;
+}
+
+#CastBox{
+    display: flex;
+    flex-direction: row;
+    align-content: space-around;
+    border-radius: var(--corner_radius);
+    overflow-x: auto;
+    border-style: solid;
+    margin: var(--margin_general);
+    background-color: white;
+    
+}
+
+.profileImg{
+    width: 80px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+
+.ActorBox{
+    display: flex;
+    border-style: solid;
+    border-radius: var(--corner_radius);
+    flex-direction: column;
+    margin :10px;
+    padding: 8px;
+    background-color: lightblue;
+    width: 100px;
+    height: f300px;
+
+
+}
+
+.ActorName, .ActorOrigName, .ActorCharacter {
+    text-align: center;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+.ActorName{
+    font-weight: bold;
+    padding-right: 20px;
+}
+#CastParent > h3{
+   margin-left: var(--margin_general);
+}
+
+
+
+@media screen and (max-width: 1000px){
+    #div_main{
+        zoom: 55%;
+        width: 100%;
+        margin: auto;
+        
+    }
+    .ShowMovieDetails{
+        border-style: solid;
+        border-color: black;
+        border-radius: var(--corner_radius);
+        margin: var(--margin_general);
+        display: grid;
+        grid-template-areas:
+          'poster main'
+          'poster main'
+          'details details';
+
+        
+    }
+
+    /*#ReleaseYear{
+        font-size: 10px;
+    }*/
+
+    .ShowMovieDetails #Poster {
+        grid-area: poster;
+        height: fit-content;
+        margin: var(--margin_general)
+
+
+
+        
+    }
+
+    .Title{
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .ShowMovieDetails #AddButtons{
+        grid-area: buttons;
+        margin: var(--margin_general);
+
+    }
+
+    .ShowMovieDetails #Title_and_rating_and_description{
+        grid-area: main;
+        white-space: normal;
+
+    }
+
+    #ReleaseYear{
+        margin-right: var(--margin_general);
+    }
+
+    .ShowMovieDetails #details{
+        grid-area: details;
+        display: flex;
+        padding-right: 10px;
+
+    }
+
+    #Description{
+        padding-right: 10px;
+
+    }
+    
+}
+
+#GroupInfo{
+    margin-left: var(--margin_general);
+
+}
+
+#groupBullets{
+    overflow-y: scroll;
+    width: fit-content;
+    max-height: 100px;
+
+    
+    
+    
+
+
+    
+}
+
+.DateSpan{
+    font-weight: bold;
+}
+
+#DurationSpan{
+    font-weight: bold;
+}
+
+.groups{
+    width: fit-content;
+    
+}
+
+#Footer{
+    margin-left: var(--margin_general);
+    margin-bottom: var(--margin_general)
+}
+
+#Title{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+#ReleaseYear{
+    font-size: 50px;
+}
+
+#NoMovie{
+    margin-left: var(--margin_general);
+}
+
+#DescriptionHeader{
+    font-weight: bold;
+    margin-top: var(--margin_general)
+}
+
+#select_group{
+    height: 30px;
+    width: 200px;
+}

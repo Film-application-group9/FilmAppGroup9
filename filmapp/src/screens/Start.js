@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 import { useUser } from "../context/useUser.js";
 import '../App.css'
 
@@ -13,7 +13,7 @@ const Start = () => {
     const { username } = useUser()
     const { userId } = useUser()
     const { token } = useUser()
-    console.log(username)
+    //console.log(username)
     
     
     return (
