@@ -62,13 +62,16 @@ const MovieSearch = () => {
         }
     };
 
-    const addFavorite = async (idMovie, title) => {
+    const addFavorite = async (idMovie, title,imgPath) => {
         //const idUser = '1';
+        setImgPath(imgPath)
         console.log('userid addfavorites: '+userId)
         const response = await axios.post('http://localhost:3001/favorites/', { 
             idUser: userId, 
             idMovie: idMovie, 
-            title: title });
+            title: title,
+            img_path: imgPath
+         });
         
         if (response.status === 200) {
             alert('Favorite movie added');
@@ -276,7 +279,7 @@ const MovieSearch = () => {
                                 <p>{"Released: "}{movie.release_date}</p>
 
                                 <ToReviewsImg id={movie.id} poster_path={movie.poster_path} title={movie.title}/>
-                                 {isLoggedIn && <div><button onClick={() => addFavorite(movie.id, movie.title)}>Add to favorites</button>
+                                 {isLoggedIn && <div><button onClick={() => addFavorite(movie.id, movie.title, movie.poster_path)}>Add to favorites</button>
                                  </div>} 
                                  <ToReviewsButton id={movie.id}/>
                                  {isLoggedIn  && <div><GroupButton idMovie={movie.id} moviename={movie.title} origMoviename={movie.original_title}

@@ -70,7 +70,7 @@ const deleteUser = async(req,res,next) => {
         if (!id) return next(new ApiError('id not found'))
         await client.query('begin')
         await client.query('delete from reviews where id_user = $1',[id])
-        //await client.query('delete from favorites where id_user = $1',[id])  
+        await client.query('delete from favorites where id_user = $1',[id])  
         await client.query('delete from accounts where id = $1 returning id',[id])
         json = {id: id}
         statusCode = 200
