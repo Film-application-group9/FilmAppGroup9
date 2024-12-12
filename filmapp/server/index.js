@@ -4,6 +4,16 @@ import dotenv from "dotenv";
 import pkg from 'pg';
 
 import userRouter from './routers/userRouter.js';
+import {searchHandler} from "./search.js";
+//import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
+//import { postUserFavorite } from './controllers/FavoritesController.js';
+import groupsRouter from './routers/groupsRouter.js'
+
+import reviewRouter from './routers/reviewRouter.js'
+
+import favoritesRouter from './routers/favoritesRouter.js'
+
+
 import { searchHandler } from "./controllers/searchController.js";
 import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
 import groupsRouter from './routers/groupsRouter.js';
