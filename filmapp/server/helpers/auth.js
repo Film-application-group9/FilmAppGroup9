@@ -15,18 +15,20 @@ const auth = (req,res,next) => {
         try {
             //const authHeader = req.headers.authorization
             //const token = authHeader.split(" ")[1]
-            const authHeader = req.headers.authorization
-            const token = authHeader.split(' ')[1]
+            //const authHeader = req.headers.authorization
+            //const token = authHeader.split(' ')[1]
+            const token = req.headers.authorization
             console.log('token in auth: '+token)
             const decodedUser = verify(token,process.env.JWT_SECRET_KEY)
             //console.log(decodedUser)
             console.log("User: ",decodedUser.username)
             console.log("UserID: ", decodedUser.id)
-            const new_token = sign({username: decodedUser.username, id: decodedUser.id},process.env.JWT_SECRET_KEY,{expiresIn: '3m'})
-            next()
-            return res
+            const new_token = sign({username: decodedUser.username, id: decodedUser.id},process.env.JWT_SECRET_KEY,{expiresIn: '15m'})
+            
+            res
                 .header('Access-Control-Expose-Headers','Authorization')
-                .header('Authorization','Bearer ' + token) 
+                .header('Authorization','Bearer ' + new_token)
+            next()
             //console.log("hoi"+decodedUser)
             //jwt.verify(token,process.env.JWT_SECRET_KEY)
             //const new_token = sign({username: decodedUser.username},process.env.JWT_SECRET_KEY,{expiresIn: '1m'})

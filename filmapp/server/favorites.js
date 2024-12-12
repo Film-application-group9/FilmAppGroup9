@@ -33,4 +33,4 @@ const getUserFavorites = async (req, res) => {
     res.json(userFavorites);
 }
 
-export { postUserFavorite, getUserFavorites, deleteUserFavorite };
+//export { postUserFavorite, getUserFavorites, deleteUserFavorite };

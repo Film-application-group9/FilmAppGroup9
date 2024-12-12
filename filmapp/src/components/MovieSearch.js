@@ -63,18 +63,22 @@ const MovieSearch = () => {
     };
 
     const addFavorite = async (idMovie, title) => {
-        const idUser = '1';
-        const response = await axios.post('http://localhost:3001/favorites', { idUser, idMovie, title });
+        //const idUser = '1';
+        console.log('userid addfavorites: '+userId)
+        const response = await axios.post('http://localhost:3001/favorites/', { 
+            idUser: userId, 
+            idMovie: idMovie, 
+            title: title });
         
-        if (response.status === 201) {
+        if (response.status === 200) {
             alert('Favorite movie added');
         } else {
             alert('Failed to add favorite movie');
         }
     };
 
-    const getFavorites = async () => {
-        const response = await axios.get('http://localhost:3001/favorites/1');
+    const getFavorites = async (userId) => {
+        const response = await axios.get('http://localhost:3001/favorites/' + userId);
         if (response.status === 200) {
             navigate('/favorites', { state: { favorites: response.data } });
         } else {
