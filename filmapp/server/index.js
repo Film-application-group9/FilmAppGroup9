@@ -35,7 +35,7 @@ app.get('/search', searchHandler(apiKey));
 app.post('/favorites', postUserFavorite);
 app.get('/favorites/:idUser', getUserFavorites);
 app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
-<<<<<<< HEAD
+
 
 app.listen(port);
 
@@ -50,6 +50,6 @@ app.listen(port);
 
 
 
-=======
+
 app.listen(port);
->>>>>>> 4ab7dc291cd9d2bd1b66d87bf39e314e388f12bd
+
