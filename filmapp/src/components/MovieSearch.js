@@ -30,9 +30,9 @@ const MovieSearch = () => {
         if (language) searchParams.append('language', language);
         if (releaseYear) searchParams.append('release_year', releaseYear);
         const response = await axios.get(`http://localhost:3001/search?${searchParams.toString()}`);
-        const data = await response.json();
+        const data = response.data;
 
-        if (response.ok) {
+        if (response.status === 200) {
             setMovies(data.results);
         } else {
             alert('Search failed');
