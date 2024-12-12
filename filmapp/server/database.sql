@@ -178,5 +178,6 @@ ALTER TABLE IF EXISTS public.users_in_groups
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
+    
 
 END;
