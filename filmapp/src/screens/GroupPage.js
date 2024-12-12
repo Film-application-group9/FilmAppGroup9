@@ -59,7 +59,7 @@ const GroupPage = () => {
             })
             .catch(error => {
                 console.error('Error checking membership:', error);
-                alert('Failed to check membership');
+             //   alert('Failed to check membership');
             });
     }, [group_id, refresh])
 
@@ -75,13 +75,13 @@ const GroupPage = () => {
                     console.log(response.data.groupname);
                     // setIsReady(true);
                 }
-                else {
+             /*   else {
                     alert('Failed to fetch groupname');
-                }
+                } */
             })
             .catch(error => {
                 console.error('Error fetching groupname:', error);
-                alert('Failed to fetch groupname');
+              //  alert('Failed to fetch groupname');
             });
     }, [group_id])
 
@@ -94,13 +94,13 @@ const GroupPage = () => {
                     setGroupUsers(response.data);
                     console.log(response.data)
                 }
-                else {
+             /*   else {
                     alert('Failed to fetch userlist');
-                }
+                } */
             })
             .catch(error => {
                 console.error('Error fetching userlist:', error);
-                alert('Failed to fetch userlist');
+             //   alert('Failed to fetch userlist');
             });
     }, [group_id, refresh])
 
@@ -113,13 +113,13 @@ const GroupPage = () => {
                     setGroupMovies(response.data);
                     console.log(response.data)
                 }
-                else {
+             /*   else {
                     alert('Failed to fetch movielist');
-                }
+                }*/
             })
             .catch(error => {
                 console.error('Error fetching movielist:', error);
-                alert('Failed to fetch movielist');
+              //  alert('Failed to fetch movielist');
             });
     }, [group_id])
 
@@ -132,13 +132,13 @@ const GroupPage = () => {
                     setGroupShowtimes(response.data);
                     console.log(response.data)
                 }
-                else {
+             /*   else {
                     alert('Failed to fetch showtimes');
-                }
+                }*/
             })
             .catch(error => {
                 console.error('Error fetching showtimes:', error);
-                alert('Failed to fetch showtimes');
+              //  alert('Failed to fetch showtimes');
             });
     }, [group_id])
 
@@ -151,13 +151,13 @@ const GroupPage = () => {
                     setJoinRequests(response.data);
                     console.log(response.data)
                 }
-                else {
+             /*   else {
                     alert('Failed to fetch join requests');
-                }
+                }*/
             })
             .catch(error => {
                 console.error('Error fetching join requests:', error);
-                alert('Failed to fetch join requests');
+              //  alert('Failed to fetch join requests');
             });
     }, [group_id, refresh])
 

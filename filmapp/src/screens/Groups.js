@@ -20,12 +20,12 @@ const Groups = () => {
                 if (response.status === 200) {
                     setAllGroups(response.data);
                 } else {
-                    alert('Failed to fetch groups');
+                 //   alert('Failed to fetch groups');
                 }
             })
             .catch(error => {
                 console.error('Error fetching groups:', error);
-                alert('Failed to fetch groups');
+              //  alert('Failed to fetch groups');
             });
          },);
 
