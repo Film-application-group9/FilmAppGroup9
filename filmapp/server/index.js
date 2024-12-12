@@ -5,12 +5,18 @@ import pkg from 'pg';
 
 import userRouter from './routers/userRouter.js';
 import {searchHandler} from "./search.js";
-import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
+//import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
+//import { postUserFavorite } from './controllers/FavoritesController.js';
 import groupsRouter from './routers/groupsRouter.js'
 
 import reviewRouter from './routers/reviewRouter.js'
 
+
 const environment = process.env.NODE_ENV
+import favoritesRouter from './routers/favoritesRouter.js'
+
+
+
 
 dotenv.config();
 const apiKey = process.env.TMDB_API_KEY;
@@ -23,9 +29,9 @@ app.use('/user',userRouter)
 app.use('/review', reviewRouter)
 app.use('/groups',groupsRouter)
 app.get('/search', searchHandler(apiKey));
-app.post('/favorites', postUserFavorite );
-app.get('/favorites/:idUser', getUserFavorites);
-app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
+app.use('/favorites', favoritesRouter);
+//app.get('/favorites/:idUser', getUserFavorites);
+//app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
 app.listen(port);
 
 export default app

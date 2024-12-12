@@ -3,6 +3,7 @@ import { insertUser,selectUserByUsername, removeUser, getUser } from "../models/
 import { ApiError } from "../helpers/ApiError.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import { pool } from "../helpers/db.js";
 
 dotenv.config()
 
@@ -38,7 +39,7 @@ const postLogin = async(req,res,next) => {
         if (userFromDb.rowCount === 0) return next(new ApiError(invalid_credentials_message))
         const user = userFromDb.rows[0]
         if (!await compare(req.body.password,user.password)) return next(new ApiError(invalid_credentials_message,401))
-        const token = sign({username: username, id: user.id},process.env.JWT_SECRET_KEY,{expiresIn: '1m'})
+        const token = sign({username: username, id: user.id},process.env.JWT_SECRET_KEY,{expiresIn: '15m'})
         console.log("Postlogin-user: ", username)
         console.log("Postlogin-token: ", token)
         return res
@@ -60,14 +61,29 @@ const deleteUser = async(req,res,next) => {
     const result = await removeUser(user.id)
     console.log(result)
     return res.status(200).json(user.id)*/
+    let statusCode = 500
+    let json
+    const id = parseInt(req.params.id)
+    const client = await pool.connect()
     try {
-        const id = parseInt(req.params.id)
+        
         if (!id) return next(new ApiError('id not found'))
-        const result = await removeUser(id)
-        console.log(result)
-        return res.status(200).json({id: id})
+        await client.query('begin')
+        await client.query('delete from reviews where id_user = $1',[id])
+        //await client.query('delete from favorites where id_user = $1',[id])  
+        await client.query('delete from accounts where id = $1 returning id',[id])
+        json = {id: id}
+        statusCode = 200
+        await client.query('commit')
+        //const result = await removeUser(id)
+        //console.log(result)
+        //return res.status(200).json({id: id})
     } catch (error) {
         next(new ApiError('delete testierror'))
+        await client.query('rollback')
+    } finally {
+        client.release()
+        return res.status(statusCode).json(json)
     }
 }
 
