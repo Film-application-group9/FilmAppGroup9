@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS public.favorites
     id_user integer,
     id_movie integer,
     moviename character varying(255) COLLATE pg_catalog."default",
+	img_path character varying(255),
     CONSTRAINT favorites_id_user_id_movie_key UNIQUE (id_user, id_movie)
 );
 
@@ -46,6 +47,7 @@ CREATE TABLE IF NOT EXISTS public.group_movies
     id_movie integer,
     moviename character varying(255) COLLATE pg_catalog."default",
 	moviename_original character varying(255), 
+	img_path character varying(255),
     CONSTRAINT group_movies_id_movie_id_group_key UNIQUE (id_movie, id_group)
 );
 
@@ -64,7 +66,7 @@ CREATE TABLE IF NOT EXISTS public.group_showtimes
     place character varying(255),
     moviename_original character varying(255) COLLATE pg_catalog."default",
     moviename_finnish character varying(255),
-    CONSTRAINT "groupShowtimes_pkey" PRIMARY KEY (id_showtime)
+    CONSTRAINT "groupShowtimes_pkey" PRIMARY KEY (id_showtime),
 	UNIQUE (showtime, place, moviename_original)
 );
 
