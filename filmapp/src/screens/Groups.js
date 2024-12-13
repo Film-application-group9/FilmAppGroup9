@@ -20,12 +20,12 @@ const Groups = () => {
                 if (response.status === 200) {
                     setAllGroups(response.data);
                 } else {
-                    alert('Failed to fetch groups');
+                 //   alert('Failed to fetch groups');
                 }
             })
             .catch(error => {
                 console.error('Error fetching groups:', error);
-                alert('Failed to fetch groups');
+              //  alert('Failed to fetch groups');
             });
          },);
 
@@ -47,8 +47,9 @@ const Groups = () => {
             console.log(response.data)
             alert('Created new group: ' + newGroupName);
             const insertedGroupId = response.data.groups_id_group;
-            console.log(insertedGroupId)
-            navigate('/groups/'+insertedGroupId)
+            console.log(insertedGroupId);
+            navigate('/groups/'+insertedGroupId);
+            setNewGroupName('');
           }).catch(error => {
             alert(error.response.data.error ? error.response.data.error : error)
           })
@@ -82,6 +83,7 @@ const Groups = () => {
                             value={newGroupName}
                             onChange={handleNameChange}
                             required
+                            autoComplete="off" 
                         />
                     </div>
                     <button type="submit">Create group</button>

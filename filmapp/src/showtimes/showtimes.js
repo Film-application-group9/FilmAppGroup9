@@ -130,8 +130,8 @@ const Showtimes = ({loggedIn, token, userId}) =>{
         
         
         
-        //const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, originalTitle, title, userId )
-        const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
+        const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, originalTitle, title, userId )
+        //const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
         setGroupArray([])
         setGroupInfo("User has one group, showtime posted to group "+groups[0].id_group)
         //console.log("clickGroup-groups: ", groups)
