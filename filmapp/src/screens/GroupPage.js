@@ -19,7 +19,7 @@ const GroupPage = () => {
 
     const navigate = useNavigate();
     const { group_id } = useParams();
-    const { userId } = useUser()
+    const { userId, token, updateToken } = useUser()
 
     // const [isReady, setIsReady] = useState(false);
     const [groupName, setGroupName] = useState('');
@@ -58,16 +58,21 @@ const GroupPage = () => {
     }, [group_id, userId])
 
     const checkMembershipStatus = () => {
-        axios.get(`${url}/groups/${group_id}/membership/${userId}`)
+        axios.get(`${url}/groups/${group_id}/membership/${userId}`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 if (response.status === 200 && response.data.case === 0) {
+                    updateToken(response);
                     setMode(AccessMode.Visitor)
                     checkRequestPending();
                 }
                 else if (response.status === 200 && response.data.case === 1) {
+                    updateToken(response);
                     setMode(AccessMode.Member)
                 }
                 else if (response.status === 200 && response.data.case === 2) {
+                    updateToken(response);
                     setMode(AccessMode.Owner)
                 } else {
                     alert('Failed to check membership');
@@ -79,19 +84,25 @@ const GroupPage = () => {
     }
 
     const checkRequestPending = () => {
-        axios.get(`${url}/groups/${group_id}/checkrequest/${userId}`)
+        axios.get(`${url}/groups/${group_id}/checkrequest/${userId}`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 console.log('join req pending: ' + response.data)
                 if (response.status === 200 && response.data === true) {
+                    updateToken(response);
                     setMode(AccessMode.VisitorPending)
                 }
             })
-        }
+    }
 
     const fetchGroupName = () => {
-        axios.get(`${url}/groups/${group_id}/groupname`)
+        axios.get(`${url}/groups/${group_id}/groupname`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 if (response.status === 200 && response.data.length !== 0) {
+                    updateToken(response);
                     setGroupName(response.data.groupname);
                     console.log(response.data.groupname);
                 }
@@ -105,9 +116,12 @@ const GroupPage = () => {
     }
 
     const fetchUserlist = () => {
-        axios.get(`${url}/groups/${group_id}/users/${userId}`)
+        axios.get(`${url}/groups/${group_id}/users/${userId}`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 if (response.status === 200) {
+                    updateToken(response);
                     setGroupUsers(response.data);
                     console.log(response.data);
                 }
@@ -121,9 +135,12 @@ const GroupPage = () => {
     }
 
     const fetchMovielist = () => {
-        axios.get(`${url}/groups/${group_id}/movies/${userId}`)
+        axios.get(`${url}/groups/${group_id}/movies/${userId}`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 if (response.status === 200) {
+                    updateToken(response);
                     setGroupMovies(response.data);
                     console.log(response.data)
                 }
@@ -137,9 +154,12 @@ const GroupPage = () => {
     }
 
     const fetchShowtimes = () => {
-        axios.get(`${url}/groups/${group_id}/showtimes/${userId}`)
+        axios.get(`${url}/groups/${group_id}/showtimes/${userId}`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 if (response.status === 200) {
+                    updateToken(response);
                     setGroupShowtimes(response.data);
                     console.log(response.data)
                 }
@@ -153,14 +173,17 @@ const GroupPage = () => {
     }
 
     const fetchJoinRequests = () => {
-        axios.get(`${url}/groups/${group_id}/pending/${userId}`)
+        axios.get(`${url}/groups/${group_id}/pending/${userId}`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
-                if (response.status === 200) {
+                if (response.status === 200 && response.data.length > 0) {
+                    updateToken(response);
                     setJoinRequests(response.data);
                     console.log(response.data)
-                }
-                else {
-                    console.error('Failed to fetch join requests');
+                } else {
+                    updateToken(response);
+                    setJoinRequests([]);
                 }
             })
             .catch(error => {
@@ -171,6 +194,9 @@ const GroupPage = () => {
     const leaveGroup = async () => {
         try {
             const response = await axios.delete(`http://localhost:3001/groups/${group_id}/leavegroup`, {
+                headers: {
+                    Authorization: token
+                },
                 data: { userId }
             });
             if (response.status === 200) {
@@ -188,6 +214,9 @@ const GroupPage = () => {
     const deleteGroup = async () => {
         try {
             const response = await axios.delete(`http://localhost:3001/groups/${group_id}/removegroup`, {
+                headers: {
+                    Authorization: token
+                },
                 data: { userId }
             });
             if (response.status === 200) {
@@ -205,6 +234,9 @@ const GroupPage = () => {
     const removeUser = async (targetUserId) => {
         try {
             const response = await axios.delete(`http://localhost:3001/groups/${group_id}/removeuser`, {
+                headers: {
+                    Authorization: token
+                },
                 data: { userId, targetUserId }
             });
             if (response.status === 200) {
@@ -223,7 +255,9 @@ const GroupPage = () => {
         try {
             const response = await axios.post(`http://localhost:3001/groups/${group_id}/joinrequest`, {
                 userId: userId
-            });
+            },
+                { headers: { Authorization: token } }
+            )
             if (response.status === 200) {
                 alert('Sent join request to group!');
                 console.log(userId)
@@ -242,7 +276,9 @@ const GroupPage = () => {
             const response = await axios.post(`http://localhost:3001/groups/${group_id}/acceptrequest`, {
                 userId: userId,
                 targetUserId: targetUserId
-            });
+            },
+                { headers: { Authorization: token } }
+            )
             if (response.status === 200) {
                 alert('Accepted join request to group!');
                 console.log(userId)
@@ -260,6 +296,9 @@ const GroupPage = () => {
     const denyJoinRequest = async (targetUserId) => {
         try {
             const response = await axios.delete(`http://localhost:3001/groups/${group_id}/denyrequest`, {
+                headers: {
+                    Authorization: token
+                },
                 data: { userId, targetUserId }
             });
             if (response.status === 200) {
@@ -277,7 +316,7 @@ const GroupPage = () => {
 
 
     return (
-        <div>
+        <div id='main'>
             <div id='groupname'>
                 <h1>{groupName}</h1>
             </div>
@@ -286,6 +325,7 @@ const GroupPage = () => {
                 <div id='visitor view'>
                     <p> You must be a member of the group the view group contents.</p>
                     {mode === AccessMode.Visitor && <button id='joinGroupButton' onClick={() => sendJoinRequest()}>Request to join group</button>}
+                    {mode === AccessMode.Visitor && <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>}
                     {mode === AccessMode.VisitorPending && <button id='disabledJoinGroupButton' disabled>Join request pending</button>}
                 </div>
             )}
@@ -294,23 +334,26 @@ const GroupPage = () => {
 
                 <div id='member and owner view'>
                     {mode === AccessMode.Member && <button id='leaveGroupButton' onClick={() => leaveGroup()}>Leave group</button>}
-                    {mode === AccessMode.Owner && <button id='leaveGroupButton' onClick={() => deleteGroup()}>Delete group</button>}
-                    {mode === AccessMode.Owner && <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>}
+                    {mode === AccessMode.Owner && <button id='deleteGroupButton' onClick={() => deleteGroup()}>Delete group</button>}
+                    <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>
                     {mode === AccessMode.Owner && (
 
-                        <div id='pendingrequests' style={{ border: '1px solid black', padding: '20px' }}>
+                        <div id='pendingrequests'>
                             <h2>Pending requests to join group</h2>
-                            {
-                                joinRequests.map(item => (
-                                    <li key={item.id_user}>
-                                        {item.username}<button id='acceptRequestButton' onClick={() => acceptJoinRequest(item.id_user)}>Accept</button>
-                                        <button id='denyRequestButton' onClick={() => denyJoinRequest(item.id_user)}>Deny</button>
-                                    </li>
-                                ))
-                            }
+
+                            {joinRequests.length === 0 ? (
+                                <div>{<i>No requests</i>}</div>) : (<div>
+                                {
+                                    joinRequests.map(item => (
+                                        <li key={item.id_user}>
+                                            {item.username}<button id='acceptRequestButton' onClick={() => acceptJoinRequest(item.id_user)}>Accept</button>
+                                            <button id='denyRequestButton' onClick={() => denyJoinRequest(item.id_user)}>Deny</button>
+                                        </li>
+                                    ))
+                                }</div>)}
                         </div>)}
 
-                    <div id='userlist' style={{ border: '1px solid black', padding: '20px' }}>
+                    <div id='userlist'>
                         <h2>Users in group</h2>
                         {
                             groupUsers.map(item => (
@@ -321,13 +364,13 @@ const GroupPage = () => {
                         }
                     </div>
 
-                    <div id='groupmovies' style={{ border: '1px solid black', padding: '20px' }}>
+                    <div id='groupmovies'>
                         <h2>Movie recommendations</h2>
                         <div id='moviecardscontainer'>
                             {
                                 groupMovies.map(item => (
                                     <div className='moviecard' key={item.id_movie} onClick={() => navigate(`/movies?id=${item.id_movie}`)}>
-                                        <img src={item.img_path} alt='Poster' />
+                                        <img src={(`https://image.tmdb.org/t/p/w200/${item.img_path}`)} alt='Poster' />
                                         <div className='moviecardtext'>
                                             <div><b>{item.moviename}</b></div>
                                             <div>{item.moviename !== item.moviename_original && ` (${item.moviename_original})`}</div>
@@ -338,7 +381,7 @@ const GroupPage = () => {
                         </div>
                     </div>
 
-                    <div id='showtimes' style={{ border: '1px solid black', padding: '20px' }}>
+                    <div id='showtimes'>
                         <h2>Coming attractions</h2>
                         {
                             <table id='showtimestable'>

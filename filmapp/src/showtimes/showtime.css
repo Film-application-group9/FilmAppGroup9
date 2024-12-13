@@ -1,5 +1,6 @@
 #Showtimes{
-    height:450px; width:550px;
+    display: flex;
+    height:550px; width:550px;
     overflow:hidden; overflow-y:scroll;
     font-size: 14px;
 }

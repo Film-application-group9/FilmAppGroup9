@@ -1,3 +1,48 @@
+#main {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        width: 1000px;
+        padding: 20px;
+        background-color: lightgray;
+        border-style: solid;
+        border-color: black;
+        border-radius:var(--corner_radius);
+}
+
+#pendingrequests, #userlist, #groupmovies, #showtimes, #comments {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-radius:var(--corner_radius);
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    padding: 20px;
+    list-style-type: none;
+
+}
+
+#userlist button {
+    border-radius: 5px;
+    width: 100px;
+    height: 20px;
+    padding: 1px;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(6, 48, 65);
+}
+
+#pendingrequests button {
+    border-radius: 5px;
+    width: 100px;
+    height: 20px;
+    padding: 1px;
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(6, 48, 65);
+}
+
 #moviecardscontainer {
     display: flex;
     flex-wrap: wrap;
@@ -25,10 +70,29 @@
     justify-content: center;
     width: 200px;
     background-color: whitesmoke;
-
 }
 
 #showtimestable tr:nth-child(even)
 {
     background-color: #f2f2f2;
+}
+
+#comments-container {
+    list-style-type: none;
+
+}
+
+#comments-form {
+    background-color: green;
+}
+
+#comments-message {
+    word-wrap: normal;
+    background-color: whitesmoke;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius:var(--corner_radius);
+    padding: 10px;
+    flex-wrap: wrap;
 }
