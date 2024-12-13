@@ -2,15 +2,15 @@ import request from 'supertest';
 import app from '../index.js';
 //import { testLogin,testLogout, testNew, testRegister } from './tests/helpers/user_helpers.js';
 import { pool } from '../helpers/db.js';
-import { postLogin } from '../controllers/UserController.js';
+
 
    describe ('Filmapp REST', () => {
         let server
         let token
-
+        let only_token
         beforeAll(async() => {
-          server = app.listen(4000, () => {
-            console.log('Test server is running on http://localhost:4000');
+          server = app.listen(4001, () => {
+            console.log('Test server is running on http://localhost:4001');
         });  
           //Mieti tyhjentäminen
           await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
@@ -22,8 +22,8 @@ import { postLogin } from '../controllers/UserController.js';
           await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE accounts RESTART IDENTITY  CASCADE ;')
           await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
-          pool.end()
           server.close()
+          
           
         })
         describe('POST /user/register', () => {
@@ -85,7 +85,7 @@ import { postLogin } from '../controllers/UserController.js';
             expect(response.headers).toHaveProperty("authorization")
             token = response.headers.authorization
             expect(token).toMatch("Bearer ")
-            const only_token = response.headers.authorization.substring(7, response.headers.authorization.length)
+            only_token = response.headers.authorization.substring(7, response.headers.authorization.length)
             expect(only_token.length).toBeGreaterThan(10)
           })
         })
@@ -103,7 +103,6 @@ import { postLogin } from '../controllers/UserController.js';
             //.send({headers: {Authorization: token}})
 
             
-            console.log("Eka token: ", token)
             expect(response.statusCode).toBe(200)
             expect(response.body.length).toBe(3)
             
@@ -134,11 +133,11 @@ import { postLogin } from '../controllers/UserController.js';
             
             const response = await request(server)
             .get('/review/all/1')
-  
+
+
             expect(response.statusCode).toBe(200)
             expect(response.body.length).toBe(3)
             for(let review of response.body){
-              console.log("Review: ", review)
               expect(review.id_user).not.toBe(5)
             }
             
@@ -155,12 +154,64 @@ import { postLogin } from '../controllers/UserController.js';
 
         })
         //toimii
-        describe('LOGOUT (by not right token)', () => {
+        describe('POST /review/new', () => {
+          
+          
+          it('should insert new review with right token', async() => { 
+            const login = await request(server)
+            .post('/user/login')
+            .send({username: "testUser@test.com", password: "test1234"})
+            let token = login.headers.authorization
+            let only_token = token.substring(7, token.length)
+            console.log("Login: ", login.statusCode)
+
+            const response = await request(server)
+            .post('/review/new')
+            .send({idMovie: 1, date:"", moviename: "test_movie", stars: 3, comment:"Comment"})
+            .set('Authorization', only_token)
+            console.log("Response ",response.statusCode)
+            expect(response.body.user).toBe(1)
+            expect(response.body.movie).toBe(1)
+            expect(response.statusCode).toBe(200)
+            
+            token = login.headers.authorization
+            only_token = token.substring(7, token.length)
+
+            /*console.log("New review1: ", response.body)
+            console.log("New code1", response.statusCode)*/
+            
+            
+            
+          })
+          it('should update review with rigth token', async() => {
+            const response = await request(server)
+            .post('/review/new')
+            .send({idMovie: 1, date:"", moviename: "test_movie", stars: 2, comment:"New comment"})
+            .set('Authorization', only_token)
+            
+            token = response.headers.authorization
+            only_token = token.substring(7, token.length)
+
+            expect(response.body.user).toBe(1)
+            expect(response.body.movie).toBe(1)
+            expect(response.statusCode).toBe(200)
+            
+            const checkUserReview = await request(server)
+            .get('/review/user/1')
+            .set('Authorization', only_token)
+
+            expect(checkUserReview.statusCode).toBe(200)
+            expect(checkUserReview.body[0].stars).toBe(2)
+            expect(checkUserReview.body[0].comment).toBe('New comment')
+            
+          })
+
           it('should not update or insert new review without rigth token', async() => {
             const response = await request(server)
             .post('/review/new')
             .send({idMovie: 1, moviename: "test_movie", stars: 3, comment:"Comment when loggedOut"})
             .set('Authorization', 'wrong_token')
+            
             
             expect(response.statusCode).toBe(403)
             expect(response.body.message).toBe("Invalid credentials")
@@ -169,43 +220,116 @@ import { postLogin } from '../controllers/UserController.js';
   
           
           })
-          
-          it('should not get groups of users wihtout rigth token', async() => {
-            /*const login = await request(server)
-            .post('/user/login')
-            .send({username: "testUser@test.com", password: "test1234"})
-            expect(login.headers.authorization).toMatch('Bearer ')*/
-            //token = login.headers.authorization
-            await pool.query('INSERT INTO groups (groupname) VALUES ($1) RETURNING *', ["test_group"])
-            await pool.query('INSERT INTO users_in_groups (users_id_user, groups_id_group) VALUES ($1,$2) RETURNING *',[1,1])
-            console.log("Kolmas token: ", token)
-            const response = await request(server)
-            .get('/groups/mygroups/1')
-            .set('Authorization', 'wrong_token')
-            
-             expect(response.statusCode).toBe(403)
-             expect(response.body.message).toBe("Invalid credentials")
-          
-          })
 
-         /* it('should not create group without right token', async() => {
-            const response = await request(server)
-            .post("/creategroup/")
-            .send({groupname: "test_group", userId: 1})
-            .set('Authorization',token)
+      })
+      
+      
 
-            console.log("Neljäs token", token)
 
-            
-            expect(response.body.length).toBe(0)
-            //console.log("Body: ", response.boYdy)
-            console.log("Code: ", response.statusCode)
-        })*/
 
-      })})
+      
+      
+    }
+    
+    
+    
+  
+  )
+        
+  describe('DELETE /user/delete/accounts', () => {
+    let server
+    let token
+    let only_token
+
+    beforeAll(async() => {
+      server = app.listen(4000, () => {
+      console.log('Test server is running on http://localhost:4000');
+        })
+    })
+    afterAll(async() => {
+      await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
+          await pool.query('TRUNCATE accounts RESTART IDENTITY CASCADE ;')
+          await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
+          server.close()
+          pool.end()
+       
+    })
+
+    it('should delete all (and only) user-related data from database', async() => {
+      
+      
+      
+      
+      const register = await request(server)
+      .post('/user/register')
+      .send({username: "deleteUser@test.com", password: "Test1234"})
+
+      expect(register.statusCode).toBe(201)
+      expect(register.body.id).toBe(1)
+      expect(register.body.username).toBe("deleteUser@test.com")
+      
+      const login = await request(server)
+        .post('/user/login')
+        .send({username: "deleteUser@test.com", password: "Test1234"})
         
         
+
+        
+        let token = login.headers.authorization
+        expect(token).toMatch('Bearer ')
+        let only_token = token.substring(7, token.length)
+        
+        
+
+        
+        await pool.query("insert into reviews (id_user, id_movie, date, moviename, stars, comment) values ($1, $2, NOW(), $3, $4, $5)", [1,1,'test_movie',3, 'test_comment'])
+        
+
+        const checkReviewExists = await request(server)
+        .get('/review/user/1')
+        .set('Authorization', only_token)
+        
+        
+        token = checkReviewExists.headers.authorization
+        only_token = token.substring(7, token.length)
+
+        
+
+        expect(checkReviewExists.body.length).toBe(1)
+        
+        
+
+        
+
+
+
+        const response = await request(server)
+        .delete('/user/delete/1')
+        .set('Authorization', only_token)
+
+
+        token=response.headers.authorization
+        only_token = token.substring(7, token.length)
+
+        const reviewCheck = await request(server)
+        .get('/review/user/1')
+        .set('Authorization', only_token)
+
+        console.log("ReviewCheck: ", reviewCheck.body)
+        
+        expect(reviewCheck.body.length).toBe(0)
+
+        //Testataan toisen käyttäjän avulla onko ryhmät, suosikit ja tili olemassa
+
+
+
+        
+       
+       
+
+      
+    })
+  })
      
    
 
-  
