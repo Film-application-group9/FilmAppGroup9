@@ -4,7 +4,7 @@ import app from '../index.js';
 import { pool } from '../helpers/db.js';
 
 
-   describe ('Filmapp REST', () => {
+   describe ('Filmapp: register, login and reviews', () => {
         let server
         let token
         let only_token
@@ -143,7 +143,7 @@ import { pool } from '../helpers/db.js';
             }
             
         })
-        it('should not show any reviews with statuscode 200', async() => {
+        it('should not show any reviews on not-commented movie, and have statuscode 200', async() => {
           const response = await request(server)
           .get('/review/all/2')
           expect(response.statusCode).toBe(200)
@@ -280,118 +280,52 @@ import { pool } from '../helpers/db.js';
         expect(token).toMatch('Bearer ')
         only_token = token.substring(7, token.length)
       })
-        it('should delete reviews with rigth credentials', async() => {
+        it('should not delete anything without rigth credentials', async() => {
 
-        
-        
-        
-
-        
-        await pool.query("insert into reviews (id_user, id_movie, date, moviename, stars, comment) values ($1, $2, NOW(), $3, $4, $5)", [1,1,'test_movie',3, 'test_comment'])
-        await pool.query(`
+          await pool.query("insert into reviews (id_user, id_movie, date, moviename, stars, comment) values ($1, $2, NOW(), $3, $4, $5)", [1,1,'test_movie',3, 'test_comment'])
+          await pool.query(`
           WITH inserted_group_id AS (
           INSERT INTO groups (groupname) VALUES ($1) RETURNING id_group
           )
           INSERT INTO users_in_groups (users_id_user, groups_id_group, is_owner) 
           VALUES ($2, (SELECT id_group FROM inserted_group_id), TRUE) 
           RETURNING *;`, ["test_group", 1])
-        //favorites alle
-        await pool.query('insert into favorites (id_user,id_movie,moviename,img_path) values ($1,$2,$3,$4) returning *',[1,1,"test_movie",""])
 
-        const checkReviewExists = await request(server)
-        .get('/review/user/1')
-        .set('Authorization', only_token)
-        
-        
-        token = checkReviewExists.headers.authorization
-        only_token = token.substring(7, token.length)
+          await pool.query('insert into favorites (id_user,id_movie,moviename,img_path) values ($1,$2,$3,$4) returning *',[1,1,"test_movie",""])
 
-        
+          const response = await request(server)
+          .delete('/user/delete/1')
+          .set('Authorization', 'wrong_token')
 
-        expect(checkReviewExists.body.length).toBe(1)
-        
-        
+        const groupTest = await pool.query("Select * FROM users_in_groups INNER JOIN (select id, username from accounts) accounts ON users_in_groups.users_id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com' ")
+        const favoritesTest = await  pool.query("Select * FROM favorites INNER JOIN (select id, username from accounts) accounts ON favorites.id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com'")
+        const reviewTest = await pool.query("Select * FROM reviews INNER JOIN (select id, username from accounts) accounts ON reviews.id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com'")
+        const accountTest = await pool.query("Select * FROM accounts WHERE username = 'deleteUser@test.com' ")
 
-        
+        expect(groupTest.rowCount).toBe(1)
+        expect(favoritesTest.rowCount).toBe(1)
+        expect(reviewTest.rowCount).toBe(1)
+        expect(accountTest.rowCount).toBe(1)
 
-
+        })
+        it('should delete user-related reviews, group-data, favorites and the account with rigth credentials', async() => {
 
         const response = await request(server)
         .delete('/user/delete/1')
         .set('Authorization', only_token)
-
-
-        token=response.headers.authorization
-        only_token = token.substring(7, token.length)
-
-        const reviewCheck = await request(server)
-        .get('/review/user/1')
-        .set('Authorization', only_token)
-
-        console.log("ReviewCheck: ", reviewCheck.body)
         
-        expect(reviewCheck.body.length).toBe(0)
-      })
-
-
-        //Testataan toisen käyttäjän avulla onko ryhmät, suosikit ja tili olemassa
-        it('should delete user-related group-details, favorites_list and account', async() => {
-          const register = await request(server)
-        .post('/user/register')
-        .send({username: "checkUser@test.com", password: "Test1234"})
+        //ryhmät, suosikit, arvioinnit ja tili
+        const groupTest = await pool.query("Select * FROM users_in_groups INNER JOIN (select id, username from accounts) accounts ON users_in_groups.users_id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com' ")
+        const favoritesTest = await  pool.query("Select * FROM favorites INNER JOIN (select id, username from accounts) accounts ON favorites.id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com'")
+        const reviewTest = await pool.query("Select * FROM reviews INNER JOIN (select id, username from accounts) accounts ON reviews.id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com'")
+        const accountTest = await pool.query("Select * FROM accounts WHERE username = 'deleteUser@test.com' ")
         
-        expect(register.statusCode).toBe(201)
-        expect(register.body.id).toBe(2)
-        expect(register.body.username).toBe("checkUser@test.com")
+        expect(groupTest.rowCount).toBe(0)
+        expect(favoritesTest.rowCount).toBe(0)
+        expect(reviewTest.rowCount).toBe(0)
+        expect(accountTest.rowCount).toBe(0)
 
-        const login = await request(server)
-        .post('/user/login')
-        .send({username: "checkUser@test.com", password: "Test1234"})
-        expect(login.statusCode).toBe(200)
-        expect(login.body.id).toBe(2)
-        expect(login.body.username).toBe("checkUser@test.com")
-        
-        token = login.headers.authorization
-        only_token = token.substring(7, token.length)
-        //ryhmät
-        const groupTest = await request(server)
-        .get('/groups/mygroups/1')
-        .set('Authorization', only_token)
-        
-        token = groupTest.headers.authorization
-        only_token = token.substring(7, token.length)
-
-        expect(groupTest.statusCode).toBe(200)
-        expect(groupTest.body.length).toBe(0)
-        
-
-
-
-        //suosikit
-        const favoritesTest = await request(server)
-        .get('/favorites/1')
-        .set('Authorization', only_token)
-
-        expect(favoritesTest.body.length).toBe(0)
-
-
-
-        //tili
-        const getAccounts = await request(server)
-        .get('/user/accounts')
-        .set('Authorization', only_token)
-        
-        console.log("GetAccounts: ", getAccounts.body)
-
-        })
-        
-
-
-        
-       
-       
-
-      
+      })   
     
   })
      
