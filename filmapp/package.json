@@ -29,7 +29,7 @@
   },
   "scripts": {
     "devStart": "cross-env NODE_ENV=development nodemon server/index.js",
-    "start": "react-scripts start",
+    "start": "nodemon server/index.js",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject"
