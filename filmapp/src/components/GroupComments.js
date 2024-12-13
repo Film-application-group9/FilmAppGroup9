@@ -81,7 +81,7 @@ const fetchComments = () => {
 
                         <input
                             placeholder='Enter your comment...'
-                            maxlength="280"
+                            maxLength="280"
                             type="text"
                             id="newComment"
                             value={newComment}
