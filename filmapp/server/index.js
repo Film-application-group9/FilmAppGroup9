@@ -11,7 +11,10 @@ import groupsRouter from './routers/groupsRouter.js'
 
 import reviewRouter from './routers/reviewRouter.js'
 
+
+const environment = process.env.NODE_ENV
 import favoritesRouter from './routers/favoritesRouter.js'
+
 
 
 
@@ -31,6 +34,7 @@ app.use('/favorites', favoritesRouter);
 //app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
 app.listen(port);
 
+export default app
 
 
 
