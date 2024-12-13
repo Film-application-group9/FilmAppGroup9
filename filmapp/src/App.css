@@ -48,16 +48,6 @@ input[type="email"] {
   font-size: 16px;
 }
 
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -86,4 +76,50 @@ input[type="email"] {
   to {
     transform: rotate(360deg);
   }
+}
+
+.div-main {
+  display: flex;
+}
+
+.sidebar {
+  background-color: #f1f1f1;
+  color: black;
+  width: 250px; /* Sidebar width */
+  height: 100vh;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li a {
+  display: block;
+  padding: 10px;
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits color from parent element */
+}
+
+.sidebar li:hover {
+  background-color: #555;
+  color: white;
+}
+
+
+.main-content {
+  flex: 1; /* Take up the remaining space */
+  padding: 20px;
+  background-color: #f4f4f4;
+  overflow-y: auto; /* Add scrolling for long content */
 }

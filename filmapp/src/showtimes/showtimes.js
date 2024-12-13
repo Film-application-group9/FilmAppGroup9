@@ -130,6 +130,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
         
         console.log("Groups[0]:" ,groups[0].id_group)
         const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, title, originalTitle, userId )
+
         //const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
         setGroupArray([])
         setGroupInfo("User has one group, showtime posted to group "+groups[0].id_group)

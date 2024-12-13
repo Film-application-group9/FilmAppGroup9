@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useUser } from "../context/useUser.js";
 
 const FavoritesList = () => {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState([]);
+    const { userId } = useUser()
 
     useEffect(() => {
-        const idUser = '1';
-        axios.get(`http://localhost:3001/favorites/${idUser}`)
+        //const idUser = '2';
+        axios.get(`http://localhost:3001/favorites/${userId}`)
+        /*axios.get('http://localhost:3001/favorites/' +userId, {
+            idUser: userId
+        })*/
             .then(response => {
                 if (response.status === 200) {
+                    console.log(response.data)
                     setFavorites(response.data);
                 } else {
                     alert('Failed to fetch favorites');
@@ -23,9 +29,9 @@ const FavoritesList = () => {
     }, []);
 
     const deleteFavorite = async (idMovie) => {
-        const idUser = '1'; 
+        //const idUser = '1'; 
         try {
-            const response = await axios.delete(`http://localhost:3001/favorites/delete/${idUser}/${idMovie}`);
+            const response = await axios.delete(`http://localhost:3001/favorites/delete/${userId}/${idMovie}`);
             if (response.status === 200) {  
                 alert('Favorite movie removed');
                 

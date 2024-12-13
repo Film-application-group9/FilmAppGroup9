@@ -3,7 +3,10 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+<<<<<<< HEAD
 const enviroment = process.env.NODE_ENV
+=======
+>>>>>>> main
 
 const { Pool } = pkg
 
@@ -11,7 +14,11 @@ const openDb = () => {
     const pool = new Pool ({
         user: process.env.DB_USER,
         host: process.env.DB_HOST,
+<<<<<<< HEAD
         database: process.env.NODE_ENV == 'development' ? process.env.DB_NAME : process.env.DB_TEST,
+=======
+        database: process.env.NODE_ENV === "development" ? process.env.DB_TEST : process.env.DB_NAME,
+>>>>>>> main
         password: process.env.DB_PASSWORD,
         port: process.env.DB_PORT
     })
