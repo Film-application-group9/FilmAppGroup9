@@ -1,3 +1,26 @@
+#main {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        width: 1000px;
+        padding: 20px;
+        background-color: lightgray;
+        border-style: solid;
+        border-color: black;
+        border-radius:var(--corner_radius);
+}
+
+#pendingrequests, #userlist, #groupmovies, #showtimes, #comments {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-radius:var(--corner_radius);
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    padding: 20px;
+}
+
 #moviecardscontainer {
     display: flex;
     flex-wrap: wrap;

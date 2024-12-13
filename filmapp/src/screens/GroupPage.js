@@ -277,7 +277,7 @@ const GroupPage = () => {
 
 
     return (
-        <div>
+        <div id='main'>
             <div id='groupname'>
                 <h1>{groupName}</h1>
             </div>
@@ -286,6 +286,7 @@ const GroupPage = () => {
                 <div id='visitor view'>
                     <p> You must be a member of the group the view group contents.</p>
                     {mode === AccessMode.Visitor && <button id='joinGroupButton' onClick={() => sendJoinRequest()}>Request to join group</button>}
+                    {mode === AccessMode.Visitor && <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>}
                     {mode === AccessMode.VisitorPending && <button id='disabledJoinGroupButton' disabled>Join request pending</button>}
                 </div>
             )}
@@ -294,8 +295,8 @@ const GroupPage = () => {
 
                 <div id='member and owner view'>
                     {mode === AccessMode.Member && <button id='leaveGroupButton' onClick={() => leaveGroup()}>Leave group</button>}
-                    {mode === AccessMode.Owner && <button id='leaveGroupButton' onClick={() => deleteGroup()}>Delete group</button>}
-                    {mode === AccessMode.Owner && <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>}
+                    {mode === AccessMode.Owner && <button id='deleteGroupButton' onClick={() => deleteGroup()}>Delete group</button>}
+                     <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>
                     {mode === AccessMode.Owner && (
 
                         <div id='pendingrequests' style={{ border: '1px solid black', padding: '20px' }}>
@@ -310,7 +311,7 @@ const GroupPage = () => {
                             }
                         </div>)}
 
-                    <div id='userlist' style={{ border: '1px solid black', padding: '20px' }}>
+                    <div id='userlist'>
                         <h2>Users in group</h2>
                         {
                             groupUsers.map(item => (
@@ -321,7 +322,7 @@ const GroupPage = () => {
                         }
                     </div>
 
-                    <div id='groupmovies' style={{ border: '1px solid black', padding: '20px' }}>
+                    <div id='groupmovies'>
                         <h2>Movie recommendations</h2>
                         <div id='moviecardscontainer'>
                             {
@@ -338,7 +339,7 @@ const GroupPage = () => {
                         </div>
                     </div>
 
-                    <div id='showtimes' style={{ border: '1px solid black', padding: '20px' }}>
+                    <div id='showtimes'>
                         <h2>Coming attractions</h2>
                         {
                             <table id='showtimestable'>

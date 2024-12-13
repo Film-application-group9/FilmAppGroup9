@@ -10,9 +10,10 @@ form {
   padding: 40px;
   border-radius: 5px;
 }
+
 .button-container {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
 }
 
 button {
@@ -23,7 +24,7 @@ button {
   font-size: 16px;
   color: rgb(255, 255, 255);
   background-color: rgb(6, 48, 65);
-  
+
 }
 
 .form-group {
@@ -34,9 +35,9 @@ button {
 
 
 label {
-  width: 100px; 
+  width: 100px;
   margin-right: 10px;
-  text-align: right; 
+  text-align: right;
 }
 
 
@@ -69,15 +70,6 @@ input[type="email"] {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .div-main {
   display: flex;
 }
@@ -85,7 +77,8 @@ input[type="email"] {
 .sidebar {
   background-color: #f1f1f1;
   color: black;
-  width: 250px; /* Sidebar width */
+  width: 250px;
+  /* Sidebar width */
   height: 100vh;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -107,8 +100,8 @@ input[type="email"] {
 .sidebar li a {
   display: block;
   padding: 10px;
-  text-decoration: none; /* Removes underline */
-  color: inherit; /* Inherits color from parent element */
+  text-decoration: none;
+  color: inherit;
 }
 
 .sidebar li:hover {
@@ -118,8 +111,11 @@ input[type="email"] {
 
 
 .main-content {
-  flex: 1; /* Take up the remaining space */
+  flex: 1;
+  min-height: 100vh;
+  justify-content: space-around;
+  flex-direction: column;
   padding: 20px;
   background-color: #f4f4f4;
-  overflow-y: auto; /* Add scrolling for long content */
+  overflow-y: auto;
 }
