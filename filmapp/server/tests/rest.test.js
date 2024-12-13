@@ -12,7 +12,7 @@ import { pool } from '../helpers/db.js';
           server = app.listen(4001, () => {
             console.log('Test server is running on http://localhost:4001');
         });  
-          //Mieti tyhjentäminen
+        await pool.query('TRUNCATE favorites RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE accounts RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
@@ -22,6 +22,7 @@ import { pool } from '../helpers/db.js';
           await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE accounts RESTART IDENTITY  CASCADE ;')
           await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
+          await pool.query('TRUNCATE favorites RESTART IDENTITY CASCADE ;')
           server.close()
           
           
@@ -250,14 +251,13 @@ import { pool } from '../helpers/db.js';
       await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE accounts RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
+          await pool.query('TRUNCATE favorites RESTART IDENTITY CASCADE ;')
           server.close()
           pool.end()
        
     })
 
-    it('should delete all (and only) user-related data from database', async() => {
-      
-      
+    it('should register and login with right credentials', async() => {
       
       
       const register = await request(server)
@@ -271,19 +271,32 @@ import { pool } from '../helpers/db.js';
       const login = await request(server)
         .post('/user/login')
         .send({username: "deleteUser@test.com", password: "Test1234"})
+      
+        expect(login.statusCode).toBe(200)
+        expect(register.body.id).toBe(1)
+        expect(register.body.username).toBe("deleteUser@test.com")
         
-        
+        token = login.headers.authorization
+        expect(token).toMatch('Bearer ')
+        only_token = token.substring(7, token.length)
+      })
+        it('should delete reviews with rigth credentials', async() => {
 
         
-        let token = login.headers.authorization
-        expect(token).toMatch('Bearer ')
-        let only_token = token.substring(7, token.length)
         
         
 
         
         await pool.query("insert into reviews (id_user, id_movie, date, moviename, stars, comment) values ($1, $2, NOW(), $3, $4, $5)", [1,1,'test_movie',3, 'test_comment'])
-        
+        await pool.query(`
+          WITH inserted_group_id AS (
+          INSERT INTO groups (groupname) VALUES ($1) RETURNING id_group
+          )
+          INSERT INTO users_in_groups (users_id_user, groups_id_group, is_owner) 
+          VALUES ($2, (SELECT id_group FROM inserted_group_id), TRUE) 
+          RETURNING *;`, ["test_group", 1])
+        //favorites alle
+        await pool.query('insert into favorites (id_user,id_movie,moviename,img_path) values ($1,$2,$3,$4) returning *',[1,1,"test_movie",""])
 
         const checkReviewExists = await request(server)
         .get('/review/user/1')
@@ -318,9 +331,60 @@ import { pool } from '../helpers/db.js';
         console.log("ReviewCheck: ", reviewCheck.body)
         
         expect(reviewCheck.body.length).toBe(0)
+      })
+
 
         //Testataan toisen käyttäjän avulla onko ryhmät, suosikit ja tili olemassa
+        it('should delete user-related group-details, favorites_list and account', async() => {
+          const register = await request(server)
+        .post('/user/register')
+        .send({username: "checkUser@test.com", password: "Test1234"})
+        
+        expect(register.statusCode).toBe(201)
+        expect(register.body.id).toBe(2)
+        expect(register.body.username).toBe("checkUser@test.com")
 
+        const login = await request(server)
+        .post('/user/login')
+        .send({username: "checkUser@test.com", password: "Test1234"})
+        expect(login.statusCode).toBe(200)
+        expect(login.body.id).toBe(2)
+        expect(login.body.username).toBe("checkUser@test.com")
+        
+        token = login.headers.authorization
+        only_token = token.substring(7, token.length)
+        //ryhmät
+        const groupTest = await request(server)
+        .get('/groups/mygroups/1')
+        .set('Authorization', only_token)
+        
+        token = groupTest.headers.authorization
+        only_token = token.substring(7, token.length)
+
+        expect(groupTest.statusCode).toBe(200)
+        expect(groupTest.body.length).toBe(0)
+        
+
+
+
+        //suosikit
+        const favoritesTest = await request(server)
+        .get('/favorites/1')
+        .set('Authorization', only_token)
+
+        expect(favoritesTest.body.length).toBe(0)
+
+
+
+        //tili
+        const getAccounts = await request(server)
+        .get('/user/accounts')
+        .set('Authorization', only_token)
+        
+        console.log("GetAccounts: ", getAccounts.body)
+
+        })
+        
 
 
         
@@ -328,7 +392,7 @@ import { pool } from '../helpers/db.js';
        
 
       
-    })
+    
   })
      
    
