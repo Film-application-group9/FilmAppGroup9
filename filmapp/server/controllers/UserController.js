@@ -106,4 +106,5 @@ const getAllUsers = async(req,res,next) => {
 }
 
 
+
 export { postRegistration, postLogin, deleteUser, getAllUsers }
