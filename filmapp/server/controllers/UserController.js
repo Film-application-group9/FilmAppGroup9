@@ -70,8 +70,11 @@ const deleteUser = async(req,res,next) => {
         if (!id) return next(new ApiError('id not found'))
         await client.query('begin')
         await client.query('delete from reviews where id_user = $1',[id])
-        await client.query('delete from favorites where id_user = $1',[id])  
-        await client.query('delete from accounts where id = $1 returning id',[id])
+        await client.query('delete from favorites where id_user = $1',[id])
+        await client.query('delete from users_in_groups where users_id_user=$1',[id])
+        //await client.query('delete from accounts where id = $1 returning id',[id]) 
+        const deleteResult = await client.query('delete from accounts where id = $1 returning id',[id])
+        if (deleteResult === 0) throw new ApiError('User not found or already deleted')
         json = {id: id}
         statusCode = 200
         await client.query('commit')
@@ -79,8 +82,9 @@ const deleteUser = async(req,res,next) => {
         //console.log(result)
         //return res.status(200).json({id: id})
     } catch (error) {
-        next(new ApiError('delete testierror'))
+        next(new ApiError('deleteUser error'))
         await client.query('rollback')
+          
     } finally {
         client.release()
         return res.status(statusCode).json(json)
