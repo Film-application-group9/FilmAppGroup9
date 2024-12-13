@@ -7,8 +7,7 @@ import { parseDate } from "../components/parseDate.js"
 const GroupComments = () => {
 
     const { group_id } = useParams();
-    const { userId } = useUser();
-    const { username } = useUser();
+    const { userId, username, token, updateToken } = useUser();
     const [newComment, setNewComment] = useState('');
     const [groupComments, setGroupComments] = useState([]);
 
@@ -19,21 +18,24 @@ const GroupComments = () => {
     }, [group_id])
 
 
-const fetchComments = () => {
-    axios.get(`${url}/groups/${group_id}/comments/${userId}`)
-    .then(response => {
-        if (response.status === 200) {
-            setGroupComments(response.data);
-            console.log(response.data)
-        }
-        else {
-            alert('Failed to fetch group comments');
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching group comments:', error);
-    });
-}
+    const fetchComments = () => {
+        axios.get(`${url}/groups/${group_id}/comments/${userId}`, {
+            headers: { Authorization: token }
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    updateToken(response);
+                    setGroupComments(response.data);
+                    //   console.log(response.data)
+                }
+                else {
+                    alert('Failed to fetch group comments');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching group comments:', error);
+            });
+    }
 
     const handleCommentChange = (e) => setNewComment(e.target.value);
 
@@ -48,7 +50,10 @@ const fetchComments = () => {
             userId: userId,
             commentText: newComment,
             username: username
-        },)
+        },
+            {
+                headers: { Authorization: token }
+            },)
             .then(response => {
                 console.log(response.data)
                 alert('Posted comment');
@@ -62,19 +67,23 @@ const fetchComments = () => {
 
     return (
         <div>
-            <div id='comments' style={{ border: '1px solid black', padding: '20px' }}>
+            <div id='comments-container'>
                 <h2>Discussion</h2>
                 {
                     groupComments.map(item => (
+
                         <li key={item.comment_time}>
-                            {parseDate(item.comment_time)} {item.username} {item.comment_text}
+                            <div id='comments-message'>
+                                <div> <b>{item.username}</b> {parseDate(item.comment_time)}</div>
+                                <div> {item.comment_text}</div>
+                            </div>
                         </li>
                     ))
                 }
             </div>
 
 
-            <div id='post comment form'>
+            <div id='comments-form'>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <h3>Post comment to group</h3>
@@ -87,7 +96,7 @@ const fetchComments = () => {
                             value={newComment}
                             onChange={handleCommentChange}
                             required
-                            autoComplete="off" 
+                            autoComplete="off"
                         />
                     </div>
                     <button type="submit">Post comment</button>
