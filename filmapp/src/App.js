@@ -19,7 +19,7 @@ import Reviews from './screens/Reviews.js';
 
 function App() {
   return (
-    <div className="shazam">
+    <div className="div-main">
 
       <UserProvider>
         <Router>
