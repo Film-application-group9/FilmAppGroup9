@@ -196,6 +196,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
 
     return(
       <div>
+        <div><h2>Finnkino showtimes</h2></div>
         <GroupInformation/>
         <select id="date" onChange={DateMuutos}>
             <option value={""}>Tänään</option> {}
