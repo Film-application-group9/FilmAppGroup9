@@ -13,7 +13,7 @@ const GroupComments = () => {
 
     const url = 'http://localhost:3001'
 
-    useEffect(() => { //comments
+    useEffect(() => {
         fetchComments();
     }, [group_id])
 
@@ -26,7 +26,7 @@ const GroupComments = () => {
                 if (response.status === 200) {
                     updateToken(response);
                     setGroupComments(response.data);
-                    //   console.log(response.data)
+                    
                 }
                 else {
                     alert('Failed to fetch group comments');

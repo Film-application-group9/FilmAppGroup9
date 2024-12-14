@@ -20,32 +20,16 @@ const Reviews = () => {
     const location = useLocation()
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
-    //console.log("Reviews-id(movie): ", id)
 
     
     const [user, setUser] = useState(username)
     
-    /*
-    const {token, username} =location.state
-    console.log("Reviews-token: ",token)
-    console.log("Reviews-username: ", username)
-    const [idMovie, setIdMovie] = useState(id)*/
-    
-
-    /*const [reviewToken, setReviewToken] = useState(token)
-    const [email, setEmail] = useState(null)
-    
-    const [idUser, setIdUser] = useState(userID)
-    
-    const [stars, setStars] = useState(null)
-    const [comment, setComment] = useState(null)*/
 
     
 
     const [boolShowAlt, setBoolShowAlt] = useState(false)
     const [boolShowAll, setBoolShowAll] = useState(true)
 
-    //const []
     const [moviename, setMoviename] = useState(null)
     const [idMovie, setIdMovie] = useState(id)
     const [moviename_original, setMoviename_original] = useState(null)
@@ -72,79 +56,10 @@ const Reviews = () => {
     const[imgPath, setImgPath]=useState(null)
     
 
-    //setIdMovie(req.query.id)
-
-        /*const getMovieSearch = async (moName) => {
-            //let moName = document.getElementById("moviename").value
-            let movArr = []
-            let moviebyname = await getMovieByName(token, moName)
-            const foundSize = moviebyname.results.results.length
-            console.log("Löydetty: ",foundSize)
-            if (foundSize == 0){
-                console.log("No movies found")
-            }else{
-                const movieFound = moviebyname
-                console.log("Found:", movieFound)
-                console.log("moviefound-type: ", typeof movieFound)
-                console.log("moviefound-genres: ", movieFound.results.results.genres)
-                const movieArray2 = movieFound.results.results.map(movie => ({
-                    title: movie.title,
-                    original_title: movie.original_title,
-                    id: movie.id,
-                    release_date: movie.release_date,
-                    orig_lang: movie.original_language
-                }))
-                
-                for(let mov of movieArray2){
-                    console.log("Mov: ", movieArray)
-                    let moNameSmallCase = moName.toLowerCase()
-                    let resTitleSmallCase = mov.title.toLowerCase()
-                    if(moNameSmallCase == resTitleSmallCase){
-                        console.log("Movie found by title: ", mov.title)
-                        console.log("ID: ", mov.id)
-                        movArr.push({id: mov.id, release_date: mov.release_date, original_lang:mov.orig_lang})
-                    }
-
-                    let resOrigTitleSmallCase = mov.original_title.toLowerCase()
-
-                    if(moNameSmallCase == resOrigTitleSmallCase){
-                        console.log("Movie found by original title: ", mov.original_title)
-                        console.log("ID: ", mov.id)
-                        let boolHelp = false
-                        for(let mov2 of movArr){
-                            if(mov2.id == mov.id){
-                                boolHelp = true
-                                break
-                            }
-                        }
-                        if(boolHelp == false){
-                            movArr.push({id: mov.id, release_date: mov.release_date, original_lang:mov.orig_lang})
-                        }
-                        
-                    }
-
-                    
-
-
-
-                }
-
-                
-
-                setMovieArray(movArr)
-                
-            }
-            
-        }*/
-
-
-
         const getDetails =async(idMov) => {
             try{
                 let movieByid = await getMovieDetails(token, idMov)
-                console.log("movieById: ", movieByid)
                 if(movieByid.results.status_code == 34){
-                console.log("Bad movie id")
                 alert("Bad movie id")
             }else{
                 setMoDet(movieByid)
@@ -154,9 +69,7 @@ const Reviews = () => {
             }
             try{
                 let castById = await getCredits(token, id)
-                console.log("castById", castById)
                 if(castById.results.status_code == 34){
-                console.log("Bad movie id")
                 alert("Bad movie id")
             }else{
                 setCastDet(castById)
@@ -205,9 +118,6 @@ const Reviews = () => {
                     setMoviename(title)
                     setIdMovie(id)
                     setMoviename_original(origTitle)
-                    console.log("ShowMovieDetails-title: ",title)
-                    console.log("ShowMovieDetails-id: ", id)
-                    //console.log("ShowMovieDetails-genres:type: ", typeof genres)
                     let countryText=""
                     for(let country of countryArray){
                         countryText += country+", "
@@ -276,12 +186,8 @@ const Reviews = () => {
                     const strs = await axiosGetStars(id)
                     const det = await getDetails(id)
                     setReviews(revs)
-                    console.log("Reviews: ", revs)
                     if(strs != null){
                         setAvgStars(strs[0].round)
-                        console.log("Stars: ", avgStars)
-                    }else{
-                        console.log("No stars")
                     }
                     if(username != "" &&  username!=null){
                         const ownRev = await axiosUserReview(token, id)
@@ -301,19 +207,12 @@ const Reviews = () => {
     
 
     const postReview = async () => {
-        //let idMovie = document.getElementById("Movie_id").value
-        //let moviename = document.getElementById("moviename").value
 
         let stars = document.getElementById("setStars").value
         let comment = document.getElementById("comment").value
         
-        console.log("postReview-token: ", token)
-        console.log("postReview-idMovie: ", idMovie)
-        console.log("postReview-moviename: ", moviename)
         const a = await axiosNewReview(token, idMovie, moviename, stars, comment)
-        console.log("postReview: ", "newReview done")
         const b = await showReviews()
-        console.log("postReview: ", "showReviews done")
 
 
     }
@@ -361,73 +260,11 @@ const Reviews = () => {
 
 
     const showMovieByID = async(input) => {
-        //const a = await getMovieSearch()
-        //let idMovie = document.getElementById("Movie_id").value
         const b = await getDetails(input)
         setBoolShowAlt(false)
-        //const b = await getDetails(token, idMovie)
     }
 
-    /*const showMovieByName = async(input) => {
-        //let search = document.getElementById("moviename").value
-        const array = await getMovieSearch(input)
-        setBoolShowAlt(true)
-        
-
-    }*/
-
-    /*const showMovie = async(e) => {
-        const input = document.getElementById("Movie_input").value
-        console.log(input)
-        if(parseInt(input)){
-            await showMovieByID(input)
-        }else{
-            await showMovieByName(input)
-        }
-        
-    }*/
-    /*const a_click = async (e) => {
-        e.preventDefault()
-        let idChosen = e.target.dataset.id
-        console.log(idChosen)
-        const a = await getDetails(idChosen)
-        
-    }*/
-
-    /*const MoviesWithSameID = () => {
-        if(boolShowAlt == true){
-            if(movieArray.length > 1){
-                const movArrLen = movieArray.length
-                const text = "Found "+movArrLen+" movies with same title: "
-                console.log("MoviesWithSameID-movieArray: ", movieArray)
-                return(<div><h3>{text}</h3><table>
-                        <thead>
-                             <tr>
-                            <th>Movie id</th>
-                            <th>Release Date</th>
-                            <th>Original language</th>
-                            </tr>
-                            </thead>
-                        <tbody>
-                    {movieArray.map((movie, index) => (
-                        <tr>
-                        <td><a href="" onClick={a_click} data-id={movie.id}>{"id: "}{movie.id}</a></td>
-                        <td>{movie.release_date}</td>
-                        <td>{movie.original_lang}</td>
-                        </tr>
-                    ))}
-                  </tbody></table></div>)
-            }
-        }else{
-            return(<div></div>)
-        }
-        
-    }*/
-
-    /*const SearchInput = () => {
-        return(<div><input id="Movie_input" type="text" placeholder="Movie id or title"></input>
-                <button id="btn_show_movie" onClick={showMovie}>Show movie</button></div>)
-    }*/
+   
 
     const delReview = async() => {
         const del = await axiosDeleteReview(token, idMovie)
@@ -478,7 +315,6 @@ const Reviews = () => {
     
 
     const GroupInformation = () => {
-        console.log("groupInformation-groupdata: ", groupData)
         const [selectedValue, setSelectedValue] = useState("No group selected")
 
         useEffect(() => {
@@ -542,7 +378,6 @@ const Reviews = () => {
     }
 
     const ReviewFields = () => {
-        console.log("ReviewFields-username: ", username)
         if(username == null || username == ""){
             return (<div id="RevFieldsNoReg">Only registered users can review the movie</div>)
         }else{
@@ -579,35 +414,7 @@ const Reviews = () => {
             if (castDet == null) {
                 return(<div id="NoMovie"><p>No movie chosen</p></div>)
             }else {
-                /*const castArray=castDet.cast
-                let cast
-                for(let actor of castArray){
-                let arr = {
-                name: actor.name,
-                original_name: actor.original_name,
-                character: actor.character,
-                profile: actor.profile_path
-
-                }
-                cast.push(arr)
-                }*/
                 let castArray=castDet.results.cast
-                console.log("ShowCast: ", castArray)
-
-                /*let castSize
-                if(castArray.length > 17){
-                    castSize = 17
-                }else{
-                    castSize = castArray.length
-                }
-
-                const noimg = Array.from({ castSize }, () => null);
-                setNoImage(noimg)*/
-
-                
-
-                
-
                 return(<div id="CastParent"><h3>Cast: </h3><div id="CastBox">
                     {castArray.map((actor, index) => (
                       <div className="ActorBox" key={actor.id}>
@@ -631,28 +438,7 @@ const Reviews = () => {
 
     }
 
-   /*const ActorImage = ({src, alt}) => {
-
-    const [imgExists, setImgExists] = useState(false)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-
-
-        let img = new Image()
-        img.onload = () => {setImgExists(true); setLoading(false);}
-        img.onerror = () => {setImgExists(false); setLoading(false);}
-        img.src={src}
-
-    }, [src]);
-
-
-    if(loading){return(<div><label>Loading...</label></div>)}
-
-    return( imgExists ? (<div><img className="profileImg" src={src} alt={alt}/></div>):
-     (<div><label>No Image</label></div>))
-
-   }*/
+  
 
    const Footer = () => {
     const navigate = useNavigate()
@@ -660,17 +446,6 @@ const Reviews = () => {
         return(<div id="Footer"><a href="" onClick={(event) => { event.preventDefault(); navigate(-1)}}>Back to homepage</a></div>)
    }
 
-   /*const GoBack = () => {
-        
-        if (window.history.length > 1) {
-        console.log("Historiaa: ", window.history.length)
-        
-        } else {
-        console.log("Ei historiaa")
-         // Määritä oletussivusi, jos ei ole edellistä sivua.
-        }
-
-   }*/
 
 
     const star_grades = [0,1,2,3,4,5]

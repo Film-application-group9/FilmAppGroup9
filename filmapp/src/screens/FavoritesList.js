@@ -9,11 +9,7 @@ const FavoritesList = () => {
     const { userId } = useUser()
 
     useEffect(() => {
-        //const idUser = '2';
         axios.get(`http://localhost:3001/favorites/${userId}`)
-        /*axios.get('http://localhost:3001/favorites/' +userId, {
-            idUser: userId
-        })*/
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data)
@@ -29,7 +25,6 @@ const FavoritesList = () => {
     }, []);
 
     const deleteFavorite = async (idMovie) => {
-        //const idUser = '1'; 
         try {
             const response = await axios.delete(`http://localhost:3001/favorites/delete/${userId}/${idMovie}`);
             if (response.status === 200) {  

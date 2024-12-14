@@ -75,7 +75,6 @@ const base_url = 'http://localhost:3001/review'
             let response = await axios.get(base_url + '/all/'+idMovie, {
                 headers: {Authorization: token}
             })
-            //console.log(response.data)
             return response.data
         }catch(error){
             console.error(error)
@@ -85,8 +84,6 @@ const base_url = 'http://localhost:3001/review'
       const axiosGetStars = async(idMovie) => {
         try{
             let response = await axios.get(base_url + '/stars/'+idMovie)
-            //console.log("axiosGetStars")
-            //console.log(response.data)
             return response.data
         }catch(error){
             console.error(error)

@@ -10,36 +10,24 @@ function Login() {
     const navigate = useNavigate()
     const { token, setToken } = useUser()
     const { username, setUsername } = useUser()  
-    //const { password, setPassword} = useUser()
     const { userId, setUserId} = useUser()
-    //const [username, setUsername]  = useState ('')
     const [password, setPassword]  = useState ('')
     function handleSubmit() {
         
         
       
-        console.log(username)
-        console.log(password)
+        
         axios.post(url + '/user/login', {
             username: username,
             password: password
           },)
           .then(response => {
-            console.log(response)
-            console.log(response.data)
-            //console.log(response.data.token)
-            //sessionStorage.setItem('token', response.data.token)
-            //sessionStorage.setItem('username',response.data.username)
-            //setToken(response.data.token)
             setToken(readAuthorizationHeader(response))
             setUserId(response.data.id)
-            //console.log("Login-userID: ", )
             sessionStorage.setItem('token', readAuthorizationHeader(response))
-            //navigate('/start',{state: {username: username}})
             navigate('/start')
                 
           }).catch(error => {
-            //alert(error.response.data.error ? error.response.data.error : error)
             alert("Wrong username/password")
             setPassword('')
           })

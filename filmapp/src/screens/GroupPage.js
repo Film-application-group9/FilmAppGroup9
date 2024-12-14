@@ -34,7 +34,6 @@ const GroupPage = () => {
     }, [group_id, userId])
 
     useEffect(() => { //accessmode debug
-        console.log('Current Mode:', mode);
     }, [mode]);
 
     useEffect(() => { //groupname
@@ -88,7 +87,6 @@ const GroupPage = () => {
             headers: { Authorization: token }
         })
             .then(response => {
-                console.log('join req pending: ' + response.data)
                 if (response.status === 200 && response.data === true) {
                     updateToken(response);
                     setMode(AccessMode.VisitorPending)
@@ -104,7 +102,6 @@ const GroupPage = () => {
                 if (response.status === 200 && response.data.length !== 0) {
                     updateToken(response);
                     setGroupName(response.data.groupname);
-                    console.log(response.data.groupname);
                 }
                 else {
                     console.error('Failed to fetch groupname');
@@ -123,7 +120,6 @@ const GroupPage = () => {
                 if (response.status === 200) {
                     updateToken(response);
                     setGroupUsers(response.data);
-                    console.log(response.data);
                 }
                 else {
                     console.error('Failed to fetch userlist');
@@ -142,7 +138,6 @@ const GroupPage = () => {
                 if (response.status === 200) {
                     updateToken(response);
                     setGroupMovies(response.data);
-                    console.log(response.data)
                 }
                 else {
                     console.error('Failed to fetch movielist');
@@ -161,7 +156,6 @@ const GroupPage = () => {
                 if (response.status === 200) {
                     updateToken(response);
                     setGroupShowtimes(response.data);
-                    console.log(response.data)
                 }
                 else {
                     console.error('Failed to fetch showtimes');
@@ -180,7 +174,6 @@ const GroupPage = () => {
                 if (response.status === 200 && response.data.length > 0) {
                     updateToken(response);
                     setJoinRequests(response.data);
-                    console.log(response.data)
                 } else {
                     updateToken(response);
                     setJoinRequests([]);
@@ -201,7 +194,6 @@ const GroupPage = () => {
             });
             if (response.status === 200) {
                 alert('Left group');
-                console.log(response);
                 setMode(AccessMode.Visitor);
             } else {
                 alert('Failed to leave group');
@@ -221,7 +213,6 @@ const GroupPage = () => {
             });
             if (response.status === 200) {
                 alert('Group deleted');
-                console.log(response);
                 navigate('/groups');
             } else {
                 alert('Failed to delete group');
@@ -241,7 +232,6 @@ const GroupPage = () => {
             });
             if (response.status === 200) {
                 alert('Removed user');
-                console.log(response);
                 fetchUserlist();
             } else {
                 alert('Failed to remove user');
@@ -260,8 +250,6 @@ const GroupPage = () => {
             )
             if (response.status === 200) {
                 alert('Sent join request to group!');
-                console.log(userId)
-                console.log(response);
                 checkRequestPending();
             } else {
                 alert('Failed to send join request');
@@ -281,8 +269,6 @@ const GroupPage = () => {
             )
             if (response.status === 200) {
                 alert('Accepted join request to group!');
-                console.log(userId)
-                console.log(response);
                 fetchUserlist();
                 fetchJoinRequests();
             } else {
@@ -303,8 +289,6 @@ const GroupPage = () => {
             });
             if (response.status === 200) {
                 alert('Denied join request');
-                console.log(userId)
-                console.log(response);
                 fetchJoinRequests();
             } else {
                 alert('Failed to deny join request');

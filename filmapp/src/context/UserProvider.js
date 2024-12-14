@@ -5,7 +5,6 @@ import { useState } from 'react';
 export default function UserProvider({children}) {
     const [token, setToken]  = useState(null)
     const [username, setUsername]  = useState ('')
-    //const [password, setPassword]  = useState ('')
     const [userId, setUserId] = useState ('')
 
     const readAuthorizationHeader = (response) => {

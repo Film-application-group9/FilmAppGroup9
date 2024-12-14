@@ -31,7 +31,6 @@ const createUserObject = (id,username,token=undefined) => {
 }
 
 const postLogin = async(req,res,next) => {
-    console.log('hei  ' +req.body.username)
     const username = req.body.username
     const invalid_credentials_message = 'Invalid credentials.'
     try {
@@ -39,15 +38,11 @@ const postLogin = async(req,res,next) => {
         if (userFromDb.rowCount === 0) return next(new ApiError(invalid_credentials_message))
         const user = userFromDb.rows[0]
         if (!await compare(req.body.password,user.password)) return next(new ApiError(invalid_credentials_message,401))
-        const token = sign({username: username, id: user.id},process.env.JWT_SECRET_KEY,{expiresIn: '15m'})
-        console.log("Postlogin-user: ", username)
-        console.log("Postlogin-token: ", token)
+        const token = sign({username: username, id: user.id},process.env.JWT_SECRET_KEY,{expiresIn: '10m'})
         return res
             .header('Access-Control-Expose-Headers','Authorization')
             .header('Authorization','Bearer ' + token)
             .status(200).json(createUserObject(user.id,user.username))
-            //.status(200).json(createUserObject(user.id,user.username,token))
-        //return res.status(200).json(createUserObject(user.id,user.username))
     } catch (error) {
         next(error)
     }

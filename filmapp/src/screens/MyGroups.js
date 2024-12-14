@@ -22,12 +22,11 @@ const MyGroups = () => {
                     updateToken(response);
                     setMyGroups(response.data);
                 } else {
-                    //   alert('Failed to fetch users groups');
+                    
                 }
             })
             .catch(error => {
                 console.error('Error fetching users groups:', error);
-                //   alert('Failed to fetch users groups');
             });
     },[])
 

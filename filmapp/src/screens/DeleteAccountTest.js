@@ -13,10 +13,9 @@ const DeleteAccountTest = () => {
     const { setUserId } = useUser()
     const { setToken } = useUser()
     function handleSubmit() {
-        //console.log(userId)
         axios.delete(url + '/user/delete/' + userId, {
             headers: {
-                Authorization: token//sessionStorage.getItem('token')
+                Authorization: token
             }        
         })
         .then (response => {

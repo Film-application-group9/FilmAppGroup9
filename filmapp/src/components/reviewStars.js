@@ -8,8 +8,6 @@ const RevStars = (rating) => {
   let fullStars = Math.floor(rating)
   let partialStar = rating - fullStars
   let starArray =[]
-  console.log("Full stars: ", fullStars)
-  console.log("Partial star: ", partialStar)
   for (let i = 0; i < fullStars; i++) {
     starArray.push(
       <IconContext.Provider value={{color: "gold" }}>
@@ -37,7 +35,6 @@ const RevStars = (rating) => {
 const Stars = ({rating}) =>{
   if(rating != null){
       let ratingFloat = parseFloat(rating)
-      console.log("ratingFloat type: ", typeof ratingFloat)
       let starArray = RevStars(ratingFloat)
       return(<label>
           <span className="Rating">{"Rating: "}</span>{rating}{" "}{starArray.map(item => item)}

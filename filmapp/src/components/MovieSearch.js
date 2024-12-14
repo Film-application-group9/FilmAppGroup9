@@ -15,9 +15,6 @@ const MovieSearch = () => {
     const [releaseYear, setReleaseYear] = useState('');
     const navigate = useNavigate();
     const {token, username, userId} = useUser()
-    console.log("MovieSearch-token: ", token)
-    console.log("MovieSearch-userID: ", userId)
-    console.log("MovieSearch: username: ", username)
 
     const [groupArray, setGroupArray] = useState(null)
 
@@ -28,10 +25,6 @@ const MovieSearch = () => {
     const [groupInfo, setGroupInfo] = useState(null)
     const [severalGroupsState, setSeveralGroupsState] = useState(null)
     const [imgPath, setImgPath] = useState(null)
-
-    // placeholder for auth status
-    
-    //Muokkasin testaamista varten
     let isLoggedIn = true;
 
     if(username == null || username.trim() == ""){
@@ -63,9 +56,7 @@ const MovieSearch = () => {
     };
 
     const addFavorite = async (idMovie, title,imgPath) => {
-        //const idUser = '1';
         setImgPath(imgPath)
-        console.log('userid addfavorites: '+userId)
         const response = await axios.post('http://localhost:3001/favorites/', { 
             idUser: userId, 
             idMovie: idMovie, 
@@ -132,7 +123,6 @@ const MovieSearch = () => {
             setGroupArray([])
         }else{
             setGroupInfo("User has many groups, select one: ")
-            console.log("GroupArray: ", groups)
             setGroupArray(groups)
 
         }
@@ -159,9 +149,7 @@ const MovieSearch = () => {
           }, [groupArray])
 
         
-        //console.log("ChooseFromManyGroups-id's", id," ",movieIdChosen)
         if(movieIdChosen == id ){
-            console.log("Osuma")
         if(groupArray == null ||groupArray.length == 0){
             return(<div>{groupInfo}</div>)
         }else{
@@ -181,12 +169,6 @@ const MovieSearch = () => {
 
     const postToGroupFromMany = async(groupID) => {
         try{
-            console.log("postToGroupFromMany-token", token)
-            console.log("postToGroupFromMany-groupID", groupID)
-            console.log("postToGroupFromMany-movieIdChosen", movieIdChosen)
-            console.log("postToGroupFromMany-moviename", moviename)
-            console.log("postToGroupFromMany-origMoviename", origMoviename)
-            console.log("postToGroupFromMany-imgpath", imgPath)
             const movieToGroup = await axiosMovieToGroup(token, groupID, movieIdChosen,userId, moviename, origMoviename, imgPath )
             setGroupInfo("Movie added to your group")
             setGroupArray([])

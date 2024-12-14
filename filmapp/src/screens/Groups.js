@@ -54,10 +54,8 @@ const Groups = () => {
             .then(response => {
                 if (response.status === 200) {
                     updateToken(response);
-                    console.log(response.data)
                     alert('Created new group: ' + newGroupName);
                     const insertedGroupId = response.data.groups_id_group;
-                    console.log(insertedGroupId);
                     navigate('/groups/' + insertedGroupId);
                     setNewGroupName('');
                 }
