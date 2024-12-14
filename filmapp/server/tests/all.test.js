@@ -4,13 +4,13 @@ import app from '../index.js';
 import { pool } from '../helpers/db.js';
 
 
-   describe ('Filmapp: register, login and reviews', () => {
+   describe ('Filmapp: register, login, all reviews and new review', () => {
         let server
         let token
         let only_token
         beforeAll(async() => {
-          server = app.listen(4001, () => {
-            console.log('Test server is running on http://localhost:4001');
+          server = app.listen(4000, () => {
+            console.log('Test server is running on http://localhost:4000');
         });  
         await pool.query('TRUNCATE favorites RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
@@ -18,7 +18,6 @@ import { pool } from '../helpers/db.js';
           await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
         })
         afterAll(async() => {
-          //Mieti tyhjentäminen
           await pool.query('TRUNCATE reviews RESTART IDENTITY CASCADE ;')
           await pool.query('TRUNCATE accounts RESTART IDENTITY  CASCADE ;')
           await pool.query('TRUNCATE groups RESTART IDENTITY CASCADE ;')
@@ -296,6 +295,10 @@ import { pool } from '../helpers/db.js';
           const response = await request(server)
           .delete('/user/delete/1')
           .set('Authorization', 'wrong_token')
+        
+          expect(response.body.message).toBe('Invalid credentials')
+          expect(response.statusCode).toBe(403)
+        
 
         const groupTest = await pool.query("Select * FROM users_in_groups INNER JOIN (select id, username from accounts) accounts ON users_in_groups.users_id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com' ")
         const favoritesTest = await  pool.query("Select * FROM favorites INNER JOIN (select id, username from accounts) accounts ON favorites.id_user = accounts.id WHERE accounts.username = 'deleteUser@test.com'")
