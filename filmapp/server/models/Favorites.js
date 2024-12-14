@@ -1,9 +1,9 @@
 import { pool } from "../helpers/db.js";
 
-const insertFavorite = async (idUser, idMovie, title) => {
+const insertFavorite = async (idUser, idMovie, title, imgPath) => {
     return await pool.query(
-        'INSERT INTO favorites (id_user, id_movie, moviename) VALUES ($1, $2, $3) ON CONFLICT (id_user, id_movie) DO NOTHING RETURNING *',
-        [idUser, idMovie, title]
+        'INSERT INTO favorites (id_user, id_movie, moviename, img_path) VALUES ($1, $2, $3, $4) ON CONFLICT (id_user, id_movie) DO NOTHING RETURNING *',
+        [idUser, idMovie, title, imgPath]
     );
 };
 

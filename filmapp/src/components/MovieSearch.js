@@ -56,13 +56,14 @@ const MovieSearch = () => {
         }
     };
 
-    const addFavorite = async (idMovie, title) => {
+    const addFavorite = async (idMovie, title, imgPath) => {
     
         try {
             const response = await axios.post('http://localhost:3001/favorites/', { 
                 idUser: userId, 
                 idMovie: idMovie, 
-                title: title
+                title: title,
+                imgPath: imgPath
             }, {
                 headers: {
                     'Authorization': token
@@ -81,7 +82,7 @@ const MovieSearch = () => {
     };
 
 
-    const getFavorites = async (idUser) => {
+   /* const getFavorites = async (idUser) => {
         const response = await axios.get(`http://localhost:3001/favorites/${idUser}`);
         if (response.status === 200) {
             navigate('/favorites', { state: { favorites: response.data.favorites } });
@@ -89,7 +90,8 @@ const MovieSearch = () => {
             alert('Failed to get favorites');
         }
     };
-
+    */
+   
     const ToReviewsButton = ({ id }) => {
         const navigate = useNavigate();
       

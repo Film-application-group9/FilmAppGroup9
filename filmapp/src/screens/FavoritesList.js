@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/useUser.js';
 
 const FavoritesList = ({ idUser, username, isOwnProfile }) => {
@@ -9,6 +9,9 @@ const FavoritesList = ({ idUser, username, isOwnProfile }) => {
     const params = useParams();
     const user = username || params.username;
     const { userId: loggedInUserId, username: loggedInUsername } = useUser();
+    const navigate = useNavigate();
+
+    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w200";
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -84,22 +87,54 @@ const FavoritesList = ({ idUser, username, isOwnProfile }) => {
         });
     };
 
+    const handleImageClick = (idMovie) => {
+        navigate(`/movies?id=${idMovie}`);
+    };
+
     return (
         <div style={{ marginLeft: '20px' }}>
-            <h2>{user}'s Favorites</h2>
+            <h2>{isOwnProfile ? 'Your Favorites' : `${user}'s Favorites`}</h2>
             {isOwnProfile && (
                 <button onClick={copyToClipboard} style={{ fontSize: '12px', padding: '5px 10px' }}>Copy link to favorites</button>
             )}
             {favorites.length === 0 ? (
                 <p>No favorites found.</p>
             ) : (
-                <ul>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
                     {favorites.map((fav, index) => (
-                        <li key={index}>
-                            {fav.moviename}
-                            {isOwnProfile && (
-                                <button onClick={() => deleteFavorite(fav.id_movie)} style={{ fontSize: '12px', padding: '5px 5px' }}>Remove</button>
+                        <li 
+                            key={index} 
+                            style={{ 
+                                margin: '10px 0', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                cursor: 'pointer' 
+                            }}
+                        >
+                            {/* Movie Poster */}
+                            {fav.img_path && (
+                                <img 
+                                    src={`${IMAGE_BASE_URL}${fav.img_path}`} 
+                                    alt={fav.moviename}
+                                    style={{ 
+                                        width: '100px', 
+                                        height: '150px', 
+                                        objectFit: 'cover', 
+                                        marginRight: '10px', 
+                                        transition: 'transform 0.2s' 
+                                    }}
+                                    onClick={() => handleImageClick(fav.id_movie)}
+                                    onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                />
                             )}
+                            {/* Movie Title and Remove Button */}
+                            <div>
+                                <h3 style={{ margin: '0 0 10px', fontSize: '16px', fontWeight: 'normal' }}>{fav.moviename}</h3>
+                                {isOwnProfile && (
+                                    <button onClick={() => deleteFavorite(fav.id_movie)} style={{ fontSize: '12px', padding: '5px 5px' }}>Remove</button>
+                                )}
+                            </div>
                         </li>
                     ))}
                 </ul>
