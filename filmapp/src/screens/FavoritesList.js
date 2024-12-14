@@ -8,12 +8,12 @@ const FavoritesList = () => {
     const [favorites, setFavorites] = useState([]);
     const { userId } = useUser()
 
+    const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w200";
+
     useEffect(() => {
-        //const idUser = '2';
+        
         axios.get(`http://localhost:3001/favorites/${userId}`)
-        /*axios.get('http://localhost:3001/favorites/' +userId, {
-            idUser: userId
-        })*/
+     
             .then(response => {
                 if (response.status === 200) {
                     console.log(response.data)
@@ -29,13 +29,11 @@ const FavoritesList = () => {
     }, []);
 
     const deleteFavorite = async (idMovie) => {
-        //const idUser = '1'; 
         try {
             const response = await axios.delete(`http://localhost:3001/favorites/delete/${userId}/${idMovie}`);
-            if (response.status === 200) {  
+            if (response.status === 200) {
                 alert('Favorite movie removed');
-                
-                setFavorites(prevFavorites => prevFavorites.filter(fav => fav.idMovie !== idMovie));
+                setFavorites(prevFavorites => prevFavorites.filter(fav => fav.id_movie !== idMovie));
             } else {
                 alert('Failed to remove favorite movie');
             }
@@ -48,11 +46,20 @@ const FavoritesList = () => {
     return (
         <div>
             <h1>Favorites List</h1>
-            <ul>
+            <ul style={{ listStyle: 'none', padding: 0 }}>
                 {favorites.map((fav, index) => (
-                    <li key={index}>
-                        {fav.title}
-                        <button onClick={() => deleteFavorite(fav.idMovie)}>Remove</button>            
+                    <li key={index} style={{ margin: '10px 0', display: 'flex', alignItems: 'center' }}>
+                        {/* Movie Poster */}
+                        <img 
+                            src={fav.img_path ? `${IMAGE_BASE_URL}${fav.img_path}` : '/placeholder-image.jpg'} 
+                            alt={fav.moviename}
+                            style={{ width: '100px', height: '150px', objectFit: 'cover', marginRight: '10px' }}
+                        />
+                        {/* Movie Title and Remove Button */}
+                        <div>
+                            <h3 style={{ margin: '0 0 10px' }}>{fav.moviename}</h3>
+                            <button onClick={() => deleteFavorite(fav.id_movie)}>Remove</button>
+                        </div>
                     </li>
                 ))}
             </ul>
