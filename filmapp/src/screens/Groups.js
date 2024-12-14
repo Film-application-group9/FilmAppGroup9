@@ -7,27 +7,28 @@ const url = 'http://localhost:3001'
 
 const Groups = () => {
 
-    const { username, setUsername } = useUser()  
-    const { userId, setUserId} = useUser()
+    const { userId, token, updateToken } = useUser()
     const navigate = useNavigate();
     const [allGroups, setAllGroups] = useState([]);
     const [newGroupName, setNewGroupName] = useState('');
 
     useEffect(() => {
-      //  const idUser = '1';
-        axios.get(url + `/groups/`)
+        axios.get(`${url}/groups/`, {
+            headers: { Authorization: token }
+        })
             .then(response => {
                 if (response.status === 200) {
                     setAllGroups(response.data);
+                    updateToken(response);
                 } else {
-                    alert('Failed to fetch groups');
+                    //   alert('Failed to fetch groups');
                 }
             })
             .catch(error => {
                 console.error('Error fetching groups:', error);
-                alert('Failed to fetch groups');
+                //  alert('Failed to fetch groups');
             });
-         },);
+    }, [])
 
     const handleNameChange = (e) => setNewGroupName(e.target.value);
 
@@ -39,20 +40,31 @@ const Groups = () => {
             return;
         }
 
-        axios.post(url + `/groups/creategroup`, {
-            userId: userId,
-            groupname: newGroupName
-          },)
-          .then(response => {
-            console.log(response.data)
-            alert('Created new group: ' + newGroupName);
-            const insertedGroupId = response.data.groups_id_group;
-            console.log(insertedGroupId)
-            navigate('/groups/'+insertedGroupId)
-          }).catch(error => {
-            alert(error.response.data.error ? error.response.data.error : error)
-          })
-       };
+        axios.post(`${url}/groups/creategroup`,
+            {
+                userId: userId,
+                groupname: newGroupName
+            },
+            {
+                headers: {
+                    Authorization: token
+                }
+            }
+        )
+            .then(response => {
+                if (response.status === 200) {
+                    updateToken(response);
+                    console.log(response.data)
+                    alert('Created new group: ' + newGroupName);
+                    const insertedGroupId = response.data.groups_id_group;
+                    console.log(insertedGroupId);
+                    navigate('/groups/' + insertedGroupId);
+                    setNewGroupName('');
+                }
+            }).catch(error => {
+                alert(error.response.data.error ? error.response.data.error : error)
+            })
+    };
 
 
     return (
@@ -82,6 +94,7 @@ const Groups = () => {
                             value={newGroupName}
                             onChange={handleNameChange}
                             required
+                            autoComplete="off"
                         />
                     </div>
                     <button type="submit">Create group</button>

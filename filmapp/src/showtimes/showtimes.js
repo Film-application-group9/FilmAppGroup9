@@ -4,7 +4,7 @@ import { xmlToJson } from './xmlToJSON.js'
 import { AreaList, PVM, AreaID, AlueBool } from './params.js'
 import { JSONtoList } from './JSONtoList.js'
 import "./showtime.css"
-import {axiosUserGroups, axiosMovieToGrou, axiosShowtimeToGroup} from "../components/groupFunctions.js"
+import {axiosUserGroups, axiosMovieToGroup, axiosShowtimeToGroup} from "../components/groupFunctions.js"
 import { timeHandle } from './timeHandle.js'
 
 const Showtimes = ({loggedIn, token, userId}) =>{
@@ -128,10 +128,10 @@ const Showtimes = ({loggedIn, token, userId}) =>{
         
         
         
-        
-        
-        //const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, originalTitle, title, userId )
-        const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
+        console.log("Groups[0]:" ,groups[0].id_group)
+        const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, title, originalTitle, userId )
+
+        //const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
         setGroupArray([])
         setGroupInfo("User has one group, showtime posted to group "+groups[0].id_group)
         //console.log("clickGroup-groups: ", groups)
@@ -196,6 +196,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
 
     return(
       <div>
+        <div><h2>Finnkino showtimes</h2></div>
         <GroupInformation/>
         <select id="date" onChange={DateMuutos}>
             <option value={""}>Tänään</option> {}

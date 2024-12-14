@@ -11,6 +11,8 @@ import userRouter from './routers/userRouter.js';
 
 
 
+
+const environment = process.env.NODE_ENV
 import favoritesRouter from './routers/favoritesRouter.js'
 
 
@@ -19,6 +21,7 @@ import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favori
 import groupsRouter from './routers/groupsRouter.js';
 import reviewRouter from './routers/reviewRouter.js';
 import profileRouter from './routers/profileRouter.js';
+
 
 dotenv.config();
 const apiKey = process.env.TMDB_API_KEY;
@@ -38,6 +41,7 @@ app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
 
 app.listen(port);
 
+export default app
 
 
 
