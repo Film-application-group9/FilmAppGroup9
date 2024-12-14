@@ -81,12 +81,13 @@ const MovieSearch = () => {
     };
 
     const getFavorites = async (userId) => {
-        const response = await axios.get('http://localhost:3001/favorites/' + userId);
+        /*const response = await axios.get('http://localhost:3001/favorites/' + userId);
         if (response.status === 200) {
             navigate('/favorites', { state: { favorites: response.data } });
         } else {
             alert('Failed to get favorites');
-        }
+        }*/
+       navigate('/favorites')
     };
 
     const ToReviewsButton = ({id}) => {
