@@ -46,7 +46,6 @@ function App() {
                 <li><Link to="/signup">Register</Link></li>
                 <li><Link to="/logout">Logout</Link></li>
                 <li><Link to="/deleteAccountTest">Delete Account</Link></li>
-                <li><Link to="/tokenTest">Get accounts</Link></li>
                 <li><Link to="/favorites">Favorites</Link></li>
                 <li><Link to="/groups">Groups</Link></li>
                 <li><Link to="/mygroups">My Groups</Link></li>
