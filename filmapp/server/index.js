@@ -4,17 +4,17 @@ import dotenv from "dotenv";
 import pkg from 'pg';
 
 import userRouter from './routers/userRouter.js';
-import {searchHandler} from "./search.js";
+
 //import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
 //import { postUserFavorite } from './controllers/FavoritesController.js';
-import groupsRouter from './routers/groupsRouter.js'
 
-import reviewRouter from './routers/reviewRouter.js'
+
+
 
 import favoritesRouter from './routers/favoritesRouter.js'
 
 
-import { searchHandler } from "./controllers/searchController.js";
+import { searchHandler } from "./controllers/SearchController.js";
 import { postUserFavorite, getUserFavorites, deleteUserFavorite } from "./favorites.js";
 import groupsRouter from './routers/groupsRouter.js';
 import reviewRouter from './routers/reviewRouter.js';
@@ -36,7 +36,6 @@ app.post('/favorites', postUserFavorite);
 app.get('/favorites/:idUser', getUserFavorites);
 app.delete('/favorites/delete/:idUser/:idMovie', deleteUserFavorite);
 
-
 app.listen(port);
 
 
@@ -51,5 +50,5 @@ app.listen(port);
 
 
 
-app.listen(port);
+
 

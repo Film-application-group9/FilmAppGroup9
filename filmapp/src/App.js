@@ -48,7 +48,7 @@ function App() {
           <Route exact path="/mygroups" element={<MyGroups />} />
           <Route exact path="/groups/:group_id" element={<GroupPage />} />
           <Route exact path="/profiles/me" element={<ProfilePage />} />
-          <Route exact path="/profiles/:username" element={<ProfilePage />} /> {/* Updated route */}
+          <Route exact path="/profiles/:username" element={<ProfilePage />} /> 
         </Routes>
       </Router>
     </UserProvider>
