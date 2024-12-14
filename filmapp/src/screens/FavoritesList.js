@@ -1,41 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useUser } from "../context/useUser.js";
+import { useParams } from 'react-router-dom';
+import { useUser } from '../context/useUser.js';
 
-const FavoritesList = () => {
-    const navigate = useNavigate();
+const FavoritesList = ({ idUser, username, isOwnProfile }) => {
     const [favorites, setFavorites] = useState([]);
-    const { userId } = useUser()
+    const [userId, setUserId] = useState(idUser);
+    const params = useParams();
+    const user = username || params.username;
+    const { userId: loggedInUserId, username: loggedInUsername } = useUser();
 
     useEffect(() => {
-        //const idUser = '2';
-        axios.get(`http://localhost:3001/favorites/${userId}`)
-        /*axios.get('http://localhost:3001/favorites/' +userId, {
-            idUser: userId
-        })*/
-            .then(response => {
-                if (response.status === 200) {
-                    console.log(response.data)
-                    setFavorites(response.data);
-                } else {
+        const fetchUserId = async () => {
+            if (user && user !== loggedInUsername) {
+                try {
+                    console.log(`Fetching profile for username: ${user}`);
+                    const response = await axios.get(`http://localhost:3001/profiles/${user}`);
+                    if (response.status === 200) {
+                        setUserId(response.data.id);
+                    } else {
+                        alert('Failed to fetch user ID');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user ID:', error);
+                    alert('Failed to fetch user ID');
+                }
+            } else {
+                setUserId(loggedInUserId);
+            }
+        };
+
+        fetchUserId();
+    }, [user, loggedInUsername, loggedInUserId]);
+
+    useEffect(() => {
+        const fetchFavorites = async () => {
+            if (userId) {
+                try {
+                    console.log(`Fetching favorites for user ID: ${userId}`);
+                    const response = await axios.get(`http://localhost:3001/favorites/${userId}`);
+                    if (response.status === 200) {
+                        console.log('Favorites fetched:', response.data.favorites);
+                        setFavorites(response.data.favorites || []); 
+                    } else {
+                        alert('Failed to fetch favorites');
+                    }
+                } catch (error) {
+                    console.error('Error fetching favorites:', error);
                     alert('Failed to fetch favorites');
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching favorites:', error);
-                alert('Failed to fetch favorites');
-            });
-    }, []);
+            }
+        };
+
+        fetchFavorites();
+    }, [userId]);
 
     const deleteFavorite = async (idMovie) => {
-        //const idUser = '1'; 
+        if (!isOwnProfile) {
+            alert('You can only remove your own favorites');
+            return;
+        }
+
         try {
             const response = await axios.delete(`http://localhost:3001/favorites/delete/${userId}/${idMovie}`);
-            if (response.status === 200) {  
+            if (response.status === 200) {
                 alert('Favorite movie removed');
-                
-                setFavorites(prevFavorites => prevFavorites.filter(fav => fav.idMovie !== idMovie));
+                setFavorites(prevFavorites => prevFavorites.filter(fav => fav.id_movie !== idMovie));
             } else {
                 alert('Failed to remove favorite movie');
             }
@@ -45,20 +75,37 @@ const FavoritesList = () => {
         }
     };
 
+    const copyToClipboard = () => {
+        const url = `http://localhost:3000/favorites/${user}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Favorites link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    };
+
     return (
-        <div>
-            <h1>Favorites List</h1>
-            <ul>
-                {favorites.map((fav, index) => (
-                    <li key={index}>
-                        {fav.title}
-                        <button onClick={() => deleteFavorite(fav.idMovie)}>Remove</button>            
-                    </li>
-                ))}
-            </ul>
-            <button onClick={() => navigate(-1)}>Return</button>
+        <div style={{ marginLeft: '20px' }}>
+            <h2>{user}'s Favorites</h2>
+            {isOwnProfile && (
+                <button onClick={copyToClipboard} style={{ fontSize: '12px', padding: '5px 10px' }}>Copy link to favorites</button>
+            )}
+            {favorites.length === 0 ? (
+                <p>No favorites found.</p>
+            ) : (
+                <ul>
+                    {favorites.map((fav, index) => (
+                        <li key={index}>
+                            {fav.moviename}
+                            {isOwnProfile && (
+                                <button onClick={() => deleteFavorite(fav.id_movie)} style={{ fontSize: '12px', padding: '5px 5px' }}>Remove</button>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
-}
+};
 
 export default FavoritesList;
