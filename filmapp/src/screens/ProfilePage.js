@@ -14,7 +14,7 @@ const ProfilePage = () => {
             try {
                 const url = username ? `http://localhost:3001/profiles/${username}` : 'http://localhost:3001/profiles/me';
                 console.log(`Fetching profile from URL: ${url}`); 
-                const headers = username ? {} : { 'Authorization': `Bearer ${token}` };
+                const headers = username ? {} : { 'Authorization': token };
                 const response = await axios.get(url, { headers });
                 if (response.status === 200) {
                     setUser(response.data);
@@ -49,7 +49,7 @@ const ProfilePage = () => {
 
     return (
         <div>
-            <h1>{user.username}'s Profile</h1>
+            <h1>Profile</h1>
             {user.username && (
                 <div>
                     <label>
@@ -71,24 +71,28 @@ const ProfilePage = () => {
                     <button onClick={copyToClipboard}>Copy link to profile</button>
                 </div>
             )}
-            <div>
-                <h2 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Search profiles</h2>
-                <form onSubmit={handleSearch}>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        placeholder="Search by username or ID" 
-                    />
-                    <input 
-                        type="submit" 
-                        id='searchProfileBtn' 
-                        value="View profile"
-                    />
-                </form>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <div>
+                    <h2>Search profiles</h2>
+                    <form onSubmit={handleSearch}>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            placeholder="Search by username or ID" 
+                        />
+                        <input 
+                            type="submit" 
+                            id='searchProfileBtn' 
+                            value="View profile"
+                        />
+                    </form>
+                </div>
             </div>
         </div>
     );
 };
 
 export default ProfilePage;
+
+

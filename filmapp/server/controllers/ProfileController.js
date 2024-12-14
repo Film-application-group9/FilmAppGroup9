@@ -6,8 +6,7 @@ dotenv.config();
 
 const getProfile = async (req, res) => {
     try {
-        const authHeader = req.headers.authorization;
-        const token = authHeader.split(' ')[1];
+        const token = req.headers.authorization;
         const decodedUser = jwt.verify(token, process.env.JWT_SECRET_KEY);
         const userId = decodedUser.id;
 
@@ -52,3 +51,4 @@ const getProfileByIdOrUsername = async (req, res) => {
 };
 
 export { getProfile, getProfileByIdOrUsername };
+

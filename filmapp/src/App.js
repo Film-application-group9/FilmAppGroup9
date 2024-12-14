@@ -48,6 +48,7 @@ function App() {
                 <li><Link to="/favorites">Favorites</Link></li>
                 <li><Link to="/groups">Groups</Link></li>
                 <li><Link to="/mygroups">My Groups</Link></li>
+                <li><Link to="/profiles/me">Profile</Link></li>
               </ul>
             </div>
           </div>
@@ -68,6 +69,8 @@ function App() {
                 <Route exact path="/groups" element={<Groups />} />
                 <Route exact path="/mygroups" element={<MyGroups />} />
                 <Route exact path="/groups/:group_id" element={<GroupPage />} />
+                <Route exact path="/profiles/:username" element={<ProfilePage />} />
+                <Route exact path="/profiles/me" element={<ProfilePage />} />
               </Routes>
 
             </div>
