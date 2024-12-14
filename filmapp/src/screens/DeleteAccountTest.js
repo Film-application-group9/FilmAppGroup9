@@ -21,7 +21,7 @@ const DeleteAccountTest = () => {
         })
         .then (response => {
             console.log(response)
-            alert("Käyttäjä poistettu")
+            alert("Account deleted")
         }).catch (error => {
             console.log(error)
         })
