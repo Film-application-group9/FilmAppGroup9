@@ -5,7 +5,7 @@
 
 form {
   max-width: 400px;
-  margin: 0 auto;
+
   background-color: rgb(66, 102, 136);
   padding: 40px;
   border-radius: 5px;
@@ -24,7 +24,6 @@ button {
   font-size: 16px;
   color: rgb(255, 255, 255);
   background-color: rgb(6, 48, 65);
-
 }
 
 .form-group {
@@ -49,29 +48,9 @@ input[type="email"] {
   font-size: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
 .div-main {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .sidebar {
@@ -118,4 +97,52 @@ input[type="email"] {
   padding: 20px;
   background-color: #f4f4f4;
   overflow-y: auto;
+}
+
+/* Responsive Design: Breakpoints */
+@media (max-width: 1000px) {
+  .container {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .sidebar {
+    width: 100px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: 10px;
+    width: auto;
+
+  }
+
+
+  .App-header {
+    font-size: calc(8px + 1vmin);
+  }
+
+  .form-group label {
+    width: auto;
+    margin-right: 5px;
+  }
+}
+
+@media (max-width: 500px) {
+  .div-main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static
+  }
+
+  .main-content {
+    padding: 10px;
+  }
 }

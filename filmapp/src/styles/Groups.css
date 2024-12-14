@@ -1,0 +1,28 @@
+#main {
+    display:flex;
+}
+
+#groupscontainer {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-radius:var(--corner_radius);
+    width: fit-content;
+}
+
+#groupslist, #mygroupslist {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-radius:var(--corner_radius);
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    padding: 20px;
+    list-style: none;
+    width: 400px;
+}
+
+#groupslist li a, #mygroupslist li a {
+    text-decoration: none;
+    }

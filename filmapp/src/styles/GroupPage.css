@@ -96,3 +96,66 @@
     padding: 10px;
     flex-wrap: wrap;
 }
+@media screen and (max-width: 1000px){
+    #main{
+        zoom: 55%;
+        width: 100%;
+        margin: auto;
+        
+
+        .ShowMovieDetails{
+            border-style: solid;
+            border-color: black;
+            border-radius: var(--corner_radius);
+            margin: var(--margin_general);
+            display: grid;
+            grid-template-areas:
+              'poster main'
+              'poster main'
+              'details details';
+
+        }
+    
+   
+        .ShowMovieDetails #Poster {
+            grid-area: poster;
+            height: fit-content;
+            margin: var(--margin_general)
+    
+        }
+    
+        .Title{
+            font-size: 30px;
+            font-weight: bold;
+        }
+    
+        .ShowMovieDetails #AddButtons{
+            grid-area: buttons;
+            margin: var(--margin_general);
+    
+        }
+    
+        .ShowMovieDetails #Title_and_rating_and_description{
+            grid-area: main;
+            white-space: normal;
+    
+        }
+    
+        #ReleaseYear{
+            margin-right: var(--margin_general);
+        }
+    
+        .ShowMovieDetails #details{
+            grid-area: details;
+            display: flex;
+            padding-right: 10px;
+    
+        }
+    
+        #Description{
+            padding-right: 10px;
+    
+        }
+        
+    }
+}
