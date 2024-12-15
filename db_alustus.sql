@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS public.group_showtimes
     moviename_original character varying(255) COLLATE pg_catalog."default",
     moviename_finnish character varying(255),
     CONSTRAINT "groupShowtimes_pkey" PRIMARY KEY (id_showtime),
-	UNIQUE (showtime, place, moviename_original)
+	UNIQUE (id_group, showtime, place, moviename_original)
 );
 
 CREATE TABLE IF NOT EXISTS public.groups
