@@ -15,19 +15,18 @@ const MovieSearch = () => {
     const [language, setLanguage] = useState('');  
     const [releaseYear, setReleaseYear] = useState('');
     const navigate = useNavigate();
-    const { token, username, userId } = useUser();
-    console.log("MovieSearch-token: ", token);
-    console.log("MovieSearch-userID: ", userId);
-    console.log("MovieSearch: username: ", username);
+    const {token, username, userId} = useUser()
 
-    const [groupArray, setGroupArray] = useState(null);
-    const [movieIdChosen, setMovieIdChosen] = useState(null);
-    const [moviename, setMoviename] = useState(null);
-    const [origMoviename, setOrigMoviename] = useState(null);
-    const [groupInfo, setGroupInfo] = useState(null);
-    const [severalGroupsState, setSeveralGroupsState] = useState(null);
-    const [imgPath, setImgPath] = useState(null);
+    const [groupArray, setGroupArray] = useState(null)
 
+    const [movieIdChosen, setMovieIdChosen] = useState(null)
+    const [moviename, setMoviename] = useState(null)
+    const [origMoviename, setOrigMoviename] = useState(null)
+
+    const [groupInfo, setGroupInfo] = useState(null)
+    const [severalGroupsState, setSeveralGroupsState] = useState(null)
+    const [imgPath, setImgPath] = useState(null)
+    const [resetHappened, setResetHappened] = useState(false)
     let isLoggedIn = true;
 
     if (username == null || username.trim() == "") {
@@ -39,9 +38,28 @@ const MovieSearch = () => {
     for (let year = currentYear; year >= 1900; year--) {
         years.push(year);
     }
+    const resetMovieSearch = (e) => {
+        e.preventDefault()
+        setQuery('')
+        setGenre('')
+        setLanguage('')
+        setReleaseYear('')
+        setResetHappened(true)
+        
+
+        
+
+    }
+
+    const moviesEmpty = () => {
+        return(<div></div>)
+    }
+    
+    
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        setResetHappened(false)
         const searchParams = new URLSearchParams();
         if (query) searchParams.append('query', query);
         if (genre) searchParams.append('genre', genre);
@@ -57,27 +75,18 @@ const MovieSearch = () => {
         }
     };
 
-    const addFavorite = async (idMovie, title, imgPath) => {
-    
-        try {
-            const response = await axios.post('http://localhost:3001/favorites/', { 
-                idUser: userId, 
-                idMovie: idMovie, 
-                title: title,
-                imgPath: imgPath
-            }, {
-                headers: {
-                    'Authorization': token
-                }
-            });
-            
-            if (response.status === 201) {
-                alert('Favorite movie added');
-            } else {
-                alert('Failed to add favorite movie');
-            }
-        } catch (error) {
-            console.error('Error adding favorite:', error);
+    const addFavorite = async (idMovie, title,imgPath) => {
+        setImgPath(imgPath)
+        const response = await axios.post('http://localhost:3001/favorites/', { 
+            idUser: userId, 
+            idMovie: idMovie, 
+            title: title,
+            img_path: imgPath
+         });
+        
+        if (response.status === 200) {
+            alert('Favorite movie added');
+        } else {
             alert('Failed to add favorite movie');
         }
     };
@@ -110,30 +119,36 @@ const MovieSearch = () => {
     };
 
     const AddToGroupButton = async (idMovie, moviename, origMoviename, imgPath) => {
-        if (moviename != null) {
-            setMovieIdChosen(idMovie);
-            setMoviename(moviename);
-            setOrigMoviename(origMoviename);
-            setImgPath(imgPath);
-            try {
-                const groups = await axiosUserGroups(token, userId);
-                if (groups.length == 0) {
-                    setGroupInfo("User has no groups");
-                    setGroupArray([]);
-                } else if (groups.length == 1) {
-                    const idGroup = groups[0].id_group;
-                    const add = await axiosMovieToGroup(token, idGroup, idMovie, userId, moviename, origMoviename, imgPath);
-                    setGroupInfo("Movie has been added to user's group");
-                    setGroupArray([]);
-                } else {
-                    setGroupInfo("User has many groups, select one: ");
-                    setGroupArray(groups);
-                }
-            } catch (error) {
-                console.error(error);
-            }
+        //token ok
+        //idGroup lisävalinta
+        if(moviename != null){
+
+        
+        setMovieIdChosen(idMovie)
+        //userId ok
+        setMoviename(moviename)
+        setOrigMoviename(origMoviename)
+        setImgPath(imgPath)
+        try{
+        const groups = await axiosUserGroups(token, userId)
+        if(groups.length == 0){
+            setGroupInfo("User has no groups")
+            setGroupArray([])
+        }else if(groups.length == 1){
+            const idGroup = groups[0].id_group
+            const add = await axiosMovieToGroup(token, idGroup, idMovie, userId, moviename, origMoviename, imgPath)
+            setGroupInfo("Movie has been added to user's group")
+            setGroupArray([])
+        }else{
+            setGroupInfo("User has many groups, select one: ")
+            setGroupArray(groups)
+
         }
-    };
+        }catch(error){
+            console.error(error)
+        }
+    }
+    }
 
     const cancelChoose = () => {
         setGroupArray(null);
@@ -144,45 +159,41 @@ const MovieSearch = () => {
         const [groupChosen, setGroupChosen] = useState("No group selected");
 
         useEffect(() => {
-            if (groupArray != null) {
-                if (groupArray.length > 0) {
-                    setGroupChosen(groupArray[0].id_group);
-                }
+            if(groupArray != null){
+              if(groupArray.length > 0){
+                setGroupChosen(groupArray[0].id_group)
+              }
             }
-        }, [groupArray]);
+              
+          }, [groupArray])
 
-        if (movieIdChosen == id) {
-            if (groupArray == null || groupArray.length == 0) {
-                return <div>{groupInfo}</div>;
-            } else {
-                return (
-                    <div>
-                        <h3>Choose group: </h3>
-                        <select value={groupChosen} onChange={(e) => setGroupChosen(e.target.value)}>
-                            {groupArray.map(ga => (
-                                <option value={ga.id_group}>{ga.groupname}</option>
-                            ))}
-                        </select>
-                        <br />
-                        <button onClick={(e) => { postToGroupFromMany(groupChosen) }}>Select group</button>
-                        <br />
-                        <button onClick={(e) => { cancelChoose() }}>Cancel add</button>
-                    </div>
-                );
-            }
-        } else {
-            return <div></div>;
+        
+        if(movieIdChosen == id ){
+        if(groupArray == null ||groupArray.length == 0){
+            return(<div>{groupInfo}</div>)
+        }else{
+            return(<div><h3>Choose group: </h3><select value={groupChosen} onChange={(e) => setGroupChosen(e.target.value)}>
+                {groupArray.map(ga => (
+                    <option value={ga.id_group}>{ga.groupname}</option>
+                ))}
+                </select><br></br>
+                <button onClick={(e) => {postToGroupFromMany(groupChosen)}}>Select group</button><br></br>
+                <button onClick={(e) => {cancelChoose()}}>Cancel add</button>
+                </div>)
         }
-    };
+    }else{
+        return(<div></div>)
+    }
+    }
 
-    const postToGroupFromMany = async (groupID) => {
-        try {
-            const movieToGroup = await axiosMovieToGroup(token, groupID, movieIdChosen, userId, moviename, origMoviename, imgPath);
-            setGroupInfo("Movie added to your group");
-            setGroupArray([]);
-        } catch (error) {
-            alert(error);
-            console.error(error);
+    const postToGroupFromMany = async(groupID) => {
+        try{
+            const movieToGroup = await axiosMovieToGroup(token, groupID, movieIdChosen,userId, moviename, origMoviename, imgPath )
+            setGroupInfo("Movie added to your group")
+            setGroupArray([])
+        }catch(error){
+            alert(error)
+            console.error(error)
         }
     };
 
@@ -208,13 +219,14 @@ const MovieSearch = () => {
         );
     };
 
+
+
     return (
         <div id='movie-search-main'>
           
             <form onSubmit={handleSearch}>
                 <h1>Search movies</h1>
-                <input
-                    required
+                <input required={resetHappened ? false:false}
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -246,10 +258,10 @@ const MovieSearch = () => {
                     ))}
                 </select>
 
-                <button type="submit">Search</button>
+                <button type="submit">Search</button><button onClick={resetMovieSearch}>Reset search</button>
                 <div className="movie-results">
                     <ul>
-                        {movies.map((movie) => (
+                        {!resetHappened && (movies.map((movie) => (
                             <li key={movie.id}>
                                 <h3>{movie.title}</h3>
                                 <p>{"Released: "}{movie.release_date}</p>
@@ -267,11 +279,14 @@ const MovieSearch = () => {
                                     </div>
                                 )}
                             </li>
-                        ))}
+                           
+                        )))}
+
+                         
                     </ul>
                 </div>
             </form>
-            <Showtimes loggedIn={username == "" || username == null ? false : true} token={token} />
+            <Showtimes loggedIn={username == "" || username == null ? false : true} token={token} userId={userId} />
         </div>
     );
 };
