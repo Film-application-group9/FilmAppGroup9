@@ -349,6 +349,7 @@ const GroupPage = () => {
                     {mode === AccessMode.Visitor && <button id='joinGroupButton' onClick={() => sendJoinRequest()}>Request to join group</button>}
                     {mode === AccessMode.Visitor && <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>}
                     {mode === AccessMode.VisitorPending && <button id='disabledJoinGroupButton' disabled>Join request pending</button>}
+                    {mode === AccessMode.VisitorPending && <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>}
                 </div>
             )}
 
