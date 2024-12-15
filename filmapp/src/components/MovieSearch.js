@@ -209,7 +209,7 @@ const MovieSearch = () => {
     };
 
     return (
-        <div>
+        <div id='movie-search-main'>
           
             <form onSubmit={handleSearch}>
                 <h1>Search movies</h1>

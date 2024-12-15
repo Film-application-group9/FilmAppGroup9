@@ -1,5 +1,4 @@
 import './App.css';
-import './styles/Review.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './screens/Signup.js';
 import Login from './screens/Login.js';
