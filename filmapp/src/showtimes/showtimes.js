@@ -129,7 +129,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
         
         
         console.log("Groups[0]:" ,groups[0].id_group)
-        const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, title, originalTitle, userId )
+        const postShowtimeToGroup = await axiosShowtimeToGroup(token, groups[0].id_group, timestamp,place, originalTitle, title, userId )
 
         //const postShowtimeToGroup = await showtimeToGroup(groups[0].id_group)
         setGroupArray([])
@@ -168,7 +168,7 @@ const Showtimes = ({loggedIn, token, userId}) =>{
     if(groupArray == null || groupArray.length == 0 || groupArray.length == 1){
       return(<div><p>{groupInfo}</p></div>)
     }else{
-      return(<div  id="GroupView">{selectedValue}<h2>Choose group: </h2>
+      return(<div  id="GroupView"><h2>Choose group: </h2>
         <div  id="GroupList">
         <select id="GroupInfo" value={selectedValue} onChange={(e) => setSelectedValue(e.target.value)}>
         {groupArray.map((ga,index) => (
