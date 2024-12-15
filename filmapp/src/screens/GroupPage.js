@@ -300,7 +300,7 @@ const GroupPage = () => {
 
 
     return (
-        <div id='main'>
+        <div id='group-page-main'>
             <div id='groupname'>
                 <h1>{groupName}</h1>
             </div>
@@ -366,7 +366,7 @@ const GroupPage = () => {
                         </div>
                     </div>
 
-                    <div id='showtimes'>
+                    <div id='grouppageshowtimes'>
                         <h2>Coming attractions</h2>
                         {
                             <table id='showtimestable'>

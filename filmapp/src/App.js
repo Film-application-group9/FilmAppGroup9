@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './screens/Signup.js';
 import Login from './screens/Login.js';
 import Logout from './screens/Logout.js';
@@ -15,31 +15,22 @@ import GroupPage from './screens/GroupPage.js';
 import ProfilePage from './screens/ProfilePage.js';
 import React from 'react';
 import Reviews from './screens/Reviews.js';
+import SideBar from './components/sideBar.js';
 
 function App() {
   return (
-    <div className="div-main">
+    <div id="app-div-main">
       <UserProvider>
         <Router>
-          <div className="sidebar">
-            <h2>Yet Another FilmApp™</h2>
-            <ul>
-              <li><Link to="/">Homepage</Link></li>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/signup">Register</Link></li>
-              <li><Link to="/logout">Logout</Link></li>
-              <li><Link to="/deleteAccountTest">Delete Account</Link></li>
-              <li><Link to="/groups">Groups</Link></li>
-              <li><Link to="/mygroups">My Groups</Link></li>
-              <li><Link to="/profiles/me">Profile</Link></li>
-            </ul>
-          </div>
-          <div className="main-content">
+          <SideBar />
+          <div id="app-main-content">
             <Routes>
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/signup" element={<Signup />} />
               <Route exact path="/logout" element={<Logout />} />
               <Route exact path="/start" element={<Start />} />
+              <Route exact path="/deleteAccountTest" element={<DeleteAccountTest />} />
+              <Route exact path="/tokenTest" element={<TokenTest />} />
               <Route exact path="/" element={<MovieSearch />} />
               <Route exact path="/favorites" element={<FavoritesList />} />
               <Route exact path="/favorites/:username" element={<FavoritesList />} />

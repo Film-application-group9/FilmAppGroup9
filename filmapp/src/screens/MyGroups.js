@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from "../context/useUser.js";
+import '../styles/Groups.css'
 
 
 const url = 'http://localhost:3001'
@@ -32,10 +33,11 @@ const MyGroups = () => {
 
 
     return (
-        <div>
-            <h1>Groups</h1>
-            <div id='mygroups'>
-                <h3>My groups</h3>
+        <div id='groups-main'>
+            <h1>My Groups</h1>
+            <div id='groupscontainer'>
+            <div id='groupslist'>
+
                 {
                     mygroups.map(item => (
                         <li key={item.id_group}>
@@ -43,6 +45,7 @@ const MyGroups = () => {
                         </li>
                     ))
                 }
+                </div>
             </div>
         </div>
     );
