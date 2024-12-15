@@ -37,9 +37,8 @@ const MovieSearch = () => {
     for (let year = currentYear; year >= 1900; year--) {
         years.push(year);
     }
-    const resetMovieSearch = async (e) => {
+    const resetMovieSearch = (e) => {
         e.preventDefault()
-        setMovies([])
         setQuery('')
         setGenre('')
         setLanguage('')
@@ -47,12 +46,19 @@ const MovieSearch = () => {
         setResetHappened(true)
         
 
+        
+
+    }
+
+    const moviesEmpty = () => {
+        return(<div></div>)
     }
     
     
 
     const handleSearch = async (e) => {
         e.preventDefault();
+        setResetHappened(false)
         const searchParams = new URLSearchParams();
         if (query) searchParams.append('query', query);
         if (genre) searchParams.append('genre', genre);
@@ -212,6 +218,8 @@ const MovieSearch = () => {
         );
     };
 
+
+
     return (
         <div>
           
@@ -249,10 +257,10 @@ const MovieSearch = () => {
                     ))}
                 </select>
 
-                <button type="submit">Search</button><button onClick={(e) => resetMovieSearch}>Reset search</button>
+                <button type="submit">Search</button><button onClick={resetMovieSearch}>Reset search</button>
                 <div className="movie-results">
                     <ul>
-                        {!resetHappened ? movies.map((movie) => (
+                        {!resetHappened && (movies.map((movie) => (
                             <li key={movie.id}>
                                 <h3>{movie.title}</h3>
                                 <p>{"Released: "}{movie.release_date}</p>
@@ -271,7 +279,7 @@ const MovieSearch = () => {
                                 )}
                             </li>
                            
-                        )):<div></div>}
+                        )))}
 
                          
                     </ul>
