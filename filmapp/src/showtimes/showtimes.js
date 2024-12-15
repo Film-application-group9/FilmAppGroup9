@@ -225,5 +225,3 @@ const Showtimes = ({loggedIn, token, userId}) =>{
 
 
 export {Showtimes}
-
-

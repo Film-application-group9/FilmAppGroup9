@@ -5,6 +5,7 @@ import { getAllGroups, insertGroup, insertUsersInGroups, getShowtimes, getMovies
 import { ApiError } from "../helpers/ApiError.js";
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import { pool } from '../helpers/db.js';
 
 dotenv.config()
 
@@ -201,7 +202,25 @@ const acceptGroupJoinRequest = async (req,res,next) => {
         return next(error)
     }
 }
+const removeMovieFromGroup = async (req, res, next) => {
+    try {
+        const { groupId } = req.params;
+        const { idMovie } = req.body;
+        const result = await pool.query(
+            'DELETE FROM group_movies WHERE id_group = $1 AND id_movie = $2 RETURNING *',
+            [groupId, idMovie]
+        );
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: 'Movie not found in group' });
+        }
+        return res.status(200).json(result.rows[0]);
+    } catch (error) {
+        return next(error);
+    }
+};
+
+
 
 export { getGroups, getUsersGroups, createGroup, getGroupShowtimes, getGroupMovies, getGroupUsers, addMovieToGroup, addShowtimeToGroup,
          removeUserFromGroup, removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests, getGroupName,
-         getMembershipStatus, checkGroupJoinRequest, denyGroupJoinRequest, acceptGroupJoinRequest, getGroupComments }
+         getMembershipStatus, checkGroupJoinRequest, denyGroupJoinRequest, acceptGroupJoinRequest, getGroupComments, removeMovieFromGroup };

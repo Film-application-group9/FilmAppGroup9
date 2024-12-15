@@ -2,7 +2,7 @@ import { Router } from "express";
 import jwt from 'jsonwebtoken';
 import { getGroups, getUsersGroups, createGroup, getGroupShowtimes, getGroupMovies, getGroupUsers, addMovieToGroup, addShowtimeToGroup, removeUserFromGroup,
          removeSelfFromGroup, addCommentToGroup, addJoinRequestToGroup, removeGroup, getPendingRequests, getMembershipStatus,
-         getGroupName, checkGroupJoinRequest, denyGroupJoinRequest, acceptGroupJoinRequest, getGroupComments} from "../controllers/GroupsController.js";
+         getGroupName, checkGroupJoinRequest, denyGroupJoinRequest, acceptGroupJoinRequest, getGroupComments, removeMovieFromGroup } from "../controllers/GroupsController.js";
 import {auth} from "../helpers/auth.js"
 const router = Router()
 
@@ -30,6 +30,6 @@ router.delete ('/:groupId/removegroup', auth, removeGroup )
 router.delete ('/:groupId/removeuser', auth, removeUserFromGroup )
 router.delete ('/:groupId/leavegroup', auth,removeSelfFromGroup )
 router.delete ('/:groupId/denyrequest', auth, denyGroupJoinRequest )
-
+router.delete('/:groupId/removemovie', auth, removeMovieFromGroup);
 
 export default router
