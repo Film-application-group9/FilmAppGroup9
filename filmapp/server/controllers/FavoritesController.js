@@ -5,13 +5,11 @@ dotenv.config();
 
 const postUserFavorite = async (req, res, next) => {
     try {
-        const { idUser, idMovie, title, imgPath } = req.body;
-        if (!idMovie || idMovie.length === 0) return next(new ApiError('movie not found', 400));
-        const result = await insertFavorite(idUser, idMovie, title, imgPath);
-        if (result.rowCount === 0) {
-            return res.status(400).json({ message: 'Movie already in favorites' });
-        }
-        return res.status(201).json(result.rows);
+        //const { idUser, idMovie, title, imgPath } = req.body;
+        //if (!idMovie || idMovie.length === 0) return next(new ApiError('movie not found', 400));
+        if (!req.body.idMovie || req.body.idMovie.length === 0) return next(new ApiError('movie not found',400))
+        const result = await insertFavorite(req.body.idUser,req.body.idMovie,req.body.title,req.body.img_path);
+        return res.status(200).json(result.rows)
     } catch (error) {
         next(error);
     }

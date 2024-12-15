@@ -525,12 +525,13 @@ const Reviews = () => {
     }
 
     const addToFavorites = async () => {
+        setImgPath(imgPath)
         const response = await axios.post('http://localhost:3001/favorites', { 
             idUser: userId, 
             idMovie: idMovie, 
-            title: moviename });
-        
-        if (response.status === 201) {
+            title: moviename, 
+            img_path: imgPath});
+        if (response.status === 200) {
             setGroupData('Favorite movie added');
         } else {
             setGroupData('Failed to add favorite movie');
