@@ -359,6 +359,7 @@ const GroupPage = () => {
                             groupUsers.map(item => (
                                 <li key={item.users_id_user}>
                                     {item.username}{item.is_owner && "👑"}{mode === AccessMode.Owner && !item.is_owner && (<button id='removeUserButton' onClick={() => removeUser(item.users_id_user)}>Remove user</button>)}
+                                     <button id='viewProfileButton' onClick={() => navigate(`/profiles/${item.users_id_user}`)}>View profile</button>
                                 </li>
                             ))
                         }
