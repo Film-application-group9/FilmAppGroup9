@@ -286,7 +286,7 @@ const MovieSearch = () => {
                     </ul>
                 </div>
             </form>
-            <Showtimes loggedIn={username == "" || username == null ? false : true} token={token} />
+            <Showtimes loggedIn={username == "" || username == null ? false : true} token={token} userId={userId} />
         </div>
     );
 };
