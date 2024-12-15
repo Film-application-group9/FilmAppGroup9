@@ -21,7 +21,7 @@ const GroupPage = () => {
     const { group_id } = useParams();
     const { userId, token, updateToken } = useUser()
     
-// const [isReady, setIsReady] = useState(false);
+    // const [isReady, setIsReady] = useState(false);
     const [groupName, setGroupName] = useState('');
     const [groupUsers, setGroupUsers] = useState([]);
     const [groupMovies, setGroupMovies] = useState([]);
