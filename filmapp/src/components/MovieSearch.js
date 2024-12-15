@@ -6,6 +6,7 @@ import { useUser } from "../context/useUser.js";
 import { RevStars } from './reviewStars.js';
 import { axiosGetStars } from './reviewFunctions.js';
 import { axiosMovieToGroup, axiosUserGroups } from './groupFunctions.js';
+import '../styles/MovieSearch.css'
 
 const MovieSearch = () => {
     const [movies, setMovies] = useState([]);
@@ -208,7 +209,7 @@ const MovieSearch = () => {
     };
 
     return (
-        <div>
+        <div id='movie-search-main'>
           
             <form onSubmit={handleSearch}>
                 <h1>Search movies</h1>

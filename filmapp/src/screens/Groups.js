@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from "../context/useUser.js";
+import '../styles/Groups.css'
 
 const url = 'http://localhost:3001'
 
@@ -68,39 +69,41 @@ const Groups = () => {
 
 
     return (
-        <div>
-            <h1>Groups</h1>
-            <div id='allgroups'>
-                <h3>All groups</h3>
-                {
-                    allGroups.map(item => (
-                        <li key={item.id_group}>
-                            <Link to={`/groups/${item.id_group}`} params={{ id: item.id_group }}>{item.groupname}</Link>
-                        </li>
-                    ))
-                }
+        <div id='groups-main'>
+             <h1>Browse user groups</h1>
+             <div id='groupscontainer'>
+                <div id='groupslist'>
+                        {
+                            allGroups.map(item => (
+                                <li key={item.id_group}>
+                                    <Link to={`/groups/${item.id_group}`} params={{ id: item.id_group }}>{item.groupname}</Link>
+                                </li>
+                            ))
+                        }
+                </div>
+
+                <div id='newgroupform'>
+
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <h3>Create a group</h3>
+
+                            <input
+                                placeholder='Enter group name'
+                                type="text"
+                                id="newGroupName"
+                                value={newGroupName}
+                                onChange={handleNameChange}
+                                required
+                                autoComplete="off"
+                                maxLength="255"
+                            />
+                        </div>
+                        <button type="submit">Create group</button>
+                    </form>
+                </div>
             </div>
 
-            <div id='create new group form'>
-
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <h3>Create a group</h3>
-
-                        <input
-                            placeholder='Enter group name'
-                            type="text"
-                            id="newGroupName"
-                            value={newGroupName}
-                            onChange={handleNameChange}
-                            required
-                            autoComplete="off"
-                        />
-                    </div>
-                    <button type="submit">Create group</button>
-                </form>
-
-            </div>
         </div>
     );
 }
