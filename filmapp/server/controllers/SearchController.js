@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+
 const genres = {
     'Action': 28,
     'Comedy': 35,
