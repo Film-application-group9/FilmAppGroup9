@@ -19,6 +19,7 @@ const SideBar = () => {
         <li>{token && <Link to="/favorites">Favorites</Link>}</li>
         <li>{token && <Link to="/groups">Groups</Link>}</li>
         <li>{token && <Link to="/mygroups">My Groups</Link>}</li>
+        <li><Link to="/profiles/me">Profile</Link></li>
       </ul>
     </div>
   );
