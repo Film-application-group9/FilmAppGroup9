@@ -55,6 +55,51 @@ input[type="email"] {
   }
 }
 
+@media screen and (max-width: 1000px){
+  .div-main {
+    display: flex;
+    flex-direction: row;
+
+  }
+
+  .sidebar {
+    background-color: #f1f1f1;
+    color: black;
+    width: 100vh;
+    /* Sidebar width */
+    height: 10vh;
+    padding: 20px;
+    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+    display: flex;
+    flex-direction: row;
+    position: sticky;
+    top: 0;
+  }
+
+
+  .sidebar h2 {
+    margin-top: 0;
+  }
+  
+  .sidebar ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .sidebar li:hover {
+    background-color: #555;
+    color: white;
+  }
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

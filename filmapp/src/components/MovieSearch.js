@@ -25,6 +25,7 @@ const MovieSearch = () => {
     const [groupInfo, setGroupInfo] = useState(null)
     const [severalGroupsState, setSeveralGroupsState] = useState(null)
     const [imgPath, setImgPath] = useState(null)
+    const [resetHappened, setResetHappened] = useState(false)
     let isLoggedIn = true;
 
     if(username == null || username.trim() == ""){
@@ -37,6 +38,19 @@ const MovieSearch = () => {
     for (let year = currentYear; year >= 1900; year--) {
         years.push(year);
     }
+    const resetMovieSearch = async (e) => {
+        e.preventDefault()
+        setMovies([])
+        setQuery('')
+        setGenre('')
+        setLanguage('')
+        setReleaseYear('')
+        setResetHappened(true)
+        
+
+    }
+    
+    
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -220,7 +234,7 @@ const MovieSearch = () => {
             }
             <form onSubmit={handleSearch}>
                 <h1>Search movies</h1>
-                <input required
+                <input required={resetHappened ? false:false}
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -252,10 +266,10 @@ const MovieSearch = () => {
                     ))}
                 </select>
 
-                <button type="submit">Search</button>
+                <button type="submit">Search</button><button onClick={(e) => resetMovieSearch}>Reset search</button>
                 <div className="movie-results">
                     <ul>
-                        {movies.map((movie) => (
+                        {!resetHappened ? movies.map((movie) => (
                             <li key={movie.id}>
                                 <h3>{movie.title}</h3>
                                 <p>{"Released: "}{movie.release_date}</p>
@@ -270,7 +284,8 @@ const MovieSearch = () => {
                                 
                             </li>
                            
-                        ))}
+                        )):<div></div>}
+
                          
                     </ul>
                 </div>

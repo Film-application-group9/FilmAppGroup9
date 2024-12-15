@@ -25,19 +25,6 @@ function App() {
         <Router>
 
           <div>
-            {/* 
-          <ul>
-            <li><Link to="/">Homepage</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Register</Link></li>
-            <li><Link to="/logout">Logout</Link></li>
-            <li><Link to="/deleteAccountTest">Delete Account</Link></li>
-            <li><Link to="/tokenTest">Get accounts</Link></li>
-            <li><Link to="/favorites">Favorites</Link></li>
-            <li><Link to="/groups">Groups</Link></li>
-            <li><Link to="/mygroups">My Groups</Link></li>
-          </ul>
-*/}
             <div className="sidebar">
               <h2>Yet Another FilmApp™</h2>
               <ul>
