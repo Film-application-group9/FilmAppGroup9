@@ -85,20 +85,18 @@ const GroupComments = () => {
 
             <div id='comments-form'>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <h3>Post comment to group</h3>
 
-                        <input
+                        <h3>Post comment to group</h3>
+                        <textarea
                             placeholder='Enter your comment...'
                             maxLength="280"
-                            type="text"
                             id="newComment"
                             value={newComment}
                             onChange={handleCommentChange}
                             required
                             autoComplete="off"
-                        />
-                    </div>
+                        ></textarea>
+
                     <button type="submit">Post comment</button>
                 </form>
             </div>

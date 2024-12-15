@@ -34,9 +34,11 @@ const MyGroups = () => {
 
 
     return (
-        <div id='main'>
+        <div id='groups-main'>
             <h1>My Groups</h1>
-            <div id='mygroupslist'>
+            <div id='groupscontainer'>
+            <div id='groupslist'>
+
                 {
                     mygroups.map(item => (
                         <li key={item.id_group}>
@@ -44,6 +46,7 @@ const MyGroups = () => {
                         </li>
                     ))
                 }
+                </div>
             </div>
         </div>
     );

@@ -69,18 +69,17 @@ const Groups = () => {
 
 
     return (
-        <div id='main'>
-            <h1>Browse user groups</h1>
-            <div id='groupscontainer'>
+        <div id='groups-main'>
+             <h1>Browse user groups</h1>
+             <div id='groupscontainer'>
                 <div id='groupslist'>
-
-                    {
-                        allGroups.map(item => (
-                            <li key={item.id_group}>
-                                <Link to={`/groups/${item.id_group}`} params={{ id: item.id_group }}>{item.groupname}</Link>
-                            </li>
-                        ))
-                    }
+                        {
+                            allGroups.map(item => (
+                                <li key={item.id_group}>
+                                    <Link to={`/groups/${item.id_group}`} params={{ id: item.id_group }}>{item.groupname}</Link>
+                                </li>
+                            ))
+                        }
                 </div>
 
                 <div id='newgroupform'>
@@ -97,6 +96,7 @@ const Groups = () => {
                                 onChange={handleNameChange}
                                 required
                                 autoComplete="off"
+                                maxLength="255"
                             />
                         </div>
                         <button type="submit">Create group</button>

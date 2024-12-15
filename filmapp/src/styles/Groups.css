@@ -1,28 +1,91 @@
-#main {
-    display:flex;
+#groups-main {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 auto;
+    width: fit-content;
+    min-width: 600px;
+    background-color: whitesmoke;
+    border-style: solid;
+    border-color: black;
+    border-radius: var(--corner_radius);
+    box-sizing: border-box;
+    justify-content: center;
+    margin: auto;
+}
+
+#groups-main h1 {
+    padding: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 #groupscontainer {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    border-radius:var(--corner_radius);
-    width: fit-content;
+    border-radius: var(--corner_radius);
+    margin: 10px;
+    border-width: 1px;
+    border-color: black;
+    background-color: whitesmoke;
 }
 
-#groupslist, #mygroupslist {
+#groupslist,
+#mygroupslist {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    border-radius:var(--corner_radius);
+    border-radius: var(--corner_radius);
+    padding: 20px;
+    list-style: none;
+    
+}
+
+#groupslist li {
+    word-wrap: break-word;
+    background-color: white;
     border-style: solid;
     border-width: 1px;
     border-color: black;
-    padding: 20px;
-    list-style: none;
-    width: 400px;
+    border-radius: var(--corner_radius);
+    padding: 10px;
+    flex-wrap: wrap;
+    width: auto;
+    max-width: 600px;
+    text-align: center;
 }
 
-#groupslist li a, #mygroupslist li a {
+#groupslist li a,
+#mygroupslist li a {
     text-decoration: none;
+    color: black;
+}
+
+#newgroupform form {
+    padding: 0px;
+    padding-bottom: 20px;
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    width: auto;
+    margin: auto;
+    background-color: whitesmoke;
+    align-items: center;
+}
+
+@media screen and (max-width: 1000px) {
+    #groups-main {
+        zoom: 100%;
+        width: 100%;
+        min-width:auto;
     }
+}
+
+@media screen and (max-width: 500px) {
+    #groups-main {
+        zoom: 70%;
+        margin: auto;
+        min-width:auto;
+    }
+
+}

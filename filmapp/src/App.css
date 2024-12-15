@@ -5,7 +5,6 @@
 
 form {
   max-width: 400px;
-
   background-color: rgb(66, 102, 136);
   padding: 40px;
   border-radius: 5px;
@@ -48,66 +47,25 @@ input[type="email"] {
   font-size: 16px;
 }
 
-.div-main {
+#app-div-main {
   display: flex;
   flex-wrap: wrap;
 }
 
-.sidebar {
-  background-color: #f1f1f1;
-  color: black;
-  width: 250px;
-  /* Sidebar width */
-  height: 100vh;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  position: sticky;
-  top: 0;
-}
-
-.sidebar h2 {
-  margin-top: 0;
-}
-
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.sidebar li a {
-  display: block;
-  padding: 10px;
-  text-decoration: none;
-  color: inherit;
-}
-
-.sidebar li:hover {
-  background-color: #555;
-  color: white;
-}
-
-
-.main-content {
+#app-main-content {
   flex: 1;
   min-height: 100vh;
   justify-content: space-around;
   flex-direction: column;
   padding: 20px;
-  background-color: #f4f4f4;
+  background-color: lightgray;
   overflow-y: auto;
 }
 
-/* Responsive Design: Breakpoints */
 @media (max-width: 1000px) {
   .container {
     margin-left: 10px;
     margin-right: 10px;
-  }
-
-  .sidebar {
-    width: 100px;
   }
 
   button {
@@ -117,12 +75,6 @@ input[type="email"] {
   .main-content {
     padding: 10px;
     width: auto;
-
-  }
-
-
-  .App-header {
-    font-size: calc(8px + 1vmin);
   }
 
   .form-group label {
@@ -132,14 +84,8 @@ input[type="email"] {
 }
 
 @media (max-width: 500px) {
-  .div-main {
+  .app-div-main {
     flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    position: static
   }
 
   .main-content {
