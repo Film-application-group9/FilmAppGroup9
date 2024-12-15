@@ -20,8 +20,8 @@ const GroupPage = () => {
     const navigate = useNavigate();
     const { group_id } = useParams();
     const { userId, token, updateToken } = useUser()
-
-    // const [isReady, setIsReady] = useState(false);
+    
+// const [isReady, setIsReady] = useState(false);
     const [groupName, setGroupName] = useState('');
     const [groupUsers, setGroupUsers] = useState([]);
     const [groupMovies, setGroupMovies] = useState([]);
@@ -314,6 +314,28 @@ const GroupPage = () => {
         }
     }
 
+    const removeMovie = async (idMovie, event) => {
+        if (event) {
+            event.stopPropagation(); 
+        }
+        try {
+            const response = await axios.delete(`${url}/groups/${group_id}/removemovie`, {
+                headers: {
+                    Authorization: token
+                },
+                data: { userId, idMovie }
+            });
+            if (response.status === 200) {
+                alert('Movie removed from group recommendations');
+                console.log(response);
+                fetchMovielist();
+            } else {
+                alert('Failed to remove movie');
+            }
+        } catch (error) {
+            console.error('Error removing movie:', error);
+        }
+    }
 
     return (
         <div id='group-page-main'>
@@ -331,16 +353,13 @@ const GroupPage = () => {
             )}
 
             {(mode === AccessMode.Member || mode === AccessMode.Owner) && (
-
                 <div id='member and owner view'>
                     {mode === AccessMode.Member && <button id='leaveGroupButton' onClick={() => leaveGroup()}>Leave group</button>}
                     {mode === AccessMode.Owner && <button id='deleteGroupButton' onClick={() => deleteGroup()}>Delete group</button>}
                     <button id='navButton' onClick={() => navigate('/groups')}>Back to Groups</button>
                     {mode === AccessMode.Owner && (
-
                         <div id='pendingrequests'>
                             <h2>Pending requests to join group</h2>
-
                             {joinRequests.length === 0 ? (
                                 <div>{<i>No requests</i>}</div>) : (<div>
                                 {
@@ -375,6 +394,9 @@ const GroupPage = () => {
                                         <div className='moviecardtext'>
                                             <div><b>{item.moviename}</b></div>
                                             <div>{item.moviename !== item.moviename_original && ` (${item.moviename_original})`}</div>
+                                            {mode === AccessMode.Owner && (
+                                                <button onClick={(event) => removeMovie(item.id_movie, event)}>Remove</button>
+                                            )}
                                         </div>
                                     </div>
                                 ))
@@ -388,7 +410,7 @@ const GroupPage = () => {
                             <table id='showtimestable'>
                                 <tbody>
                                     {groupShowtimes.map(item => (
-                                        <tr>
+                                        <tr key={item.id_showtime}>
                                             <td>{item.moviename_finnish}{item.moviename_finnish !== item.moviename_original && ` (${item.moviename_original})`}</td>
                                             <td>{item.place}</td>
                                             <td>{parseDate(item.showtime)}</td>
@@ -404,11 +426,10 @@ const GroupPage = () => {
                     </div>
 
                 </div>
-
-
             )}
 
-        </div>)
+        </div>
+    );
 }
 
 export default GroupPage;
